@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -18,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-public class Controller {
+public class MainController {
     private Stage stage;
-    private ImageView imageView;
+    private ImageView imageView;// chèn video
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -34,6 +33,7 @@ public class Controller {
 //    public void start(ActionEvent event){
 //
 //    }
+
 
     //Bắt sự kiện bấm vô chụp ảnh
     public void clickCapture (ActionEvent event){
@@ -57,12 +57,6 @@ public class Controller {
         ButtonType buttonYes = new ButtonType("Submit",ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(buttonYes,ButtonType.CANCEL);
 
-        Node button = dialog.getDialogPane().lookupButton(buttonYes);
-        button.setDisable(true);
-
-        name.textProperty().addListener((observableValue, s, t1) -> {
-            button.setDisable(t1.trim().isEmpty());
-        });
 
         //sau khi submit in ra thoong tin ddeer kieerm soats loix
         dialog.setResultConverter(dialogButton->{
@@ -75,7 +69,7 @@ public class Controller {
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(name1->{
-            System.out.println(name);
+            System.out.println("File name :"+name.getText());
         });
     }
 
@@ -87,19 +81,18 @@ public class Controller {
          //Chỉ chọn ảnh kiểu .png .jpg .gif
          fileChooser.getExtensionFilters().addAll(
                  new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-         File selectedFile = fileChooser.showOpenDialog(stage); // Sử dụng stage từ trường stage
+         File selectedFile = fileChooser.showOpenDialog(stage);
          if (selectedFile != null) {
              System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 
             // Hiển thị ảnh đã chọn trong một stage mới
              try {
-                 showImageInCurrentStage(selectedFile);
+                 this.showImageInCurrentStage(selectedFile);
              } catch (IOException e) {
                  e.printStackTrace();
              }
          }
      }
-
 
     private void showImageInCurrentStage(File file) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
@@ -107,15 +100,36 @@ public class Controller {
 
         //add controller
         ImageViewController controller = loader.getController();
-        Image image = new Image(file.toURI().toString());
-        controller.setImage(image);
+        Image image_new = new Image(file.toURI().toString());
+        controller.setImage(image_new);
 
         Scene newScene = new Scene(root);
 
         stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
         stage.setTitle("Selected Image");
 
+        controller.setStage(stage);
+
         //thêm css mới cho scene này
         newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
+    }
+
+    //Ấn vô nút Filter
+    public void clickFilter (ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
+        Parent root = loader.load();
+
+        //add controller
+        FilterController controller = loader.getController();
+        //set thêm ảnh
+
+        Scene newScene = new Scene(root);
+        stage.setScene(newScene);
+        stage.setTitle("Select Filter");
+
+        controller.setStage(stage);
+
+        //thêm css mới cho scene này
+        newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
     }
 }
