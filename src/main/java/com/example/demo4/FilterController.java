@@ -14,7 +14,6 @@ public class FilterController {
     private Stage stage;
 
 
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -22,7 +21,7 @@ public class FilterController {
     public void chooseFilter() {
         try {
             //Thêm fxml
-            FXMLLoader loader =new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
@@ -42,21 +41,21 @@ public class FilterController {
         }
     }
 
-    public void clickFilter1 (ActionEvent event){
+    public void clickFilter1(ActionEvent event) {
         chooseFilter();
     }
 
-    public void clickFilter2 (ActionEvent event){
+    public void clickFilter2(ActionEvent event) {
         chooseFilter();
     }
 
-    public void clickFilter3 (ActionEvent event){
+    public void clickFilter3(ActionEvent event) {
         chooseFilter();
     }
 
-    public void clickFilter4 (ActionEvent event){
+    public void clickFilter4(ActionEvent event) {
         chooseFilter();
     }
-
-
 }
+
+

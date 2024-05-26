@@ -13,7 +13,7 @@ import java.io.IOException;
 public class FilterImageController {
 
     private Stage stage;
-    private Image image; // Tham chiếu tới ImageViewController
+    private Image image;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -59,3 +59,4 @@ public class FilterImageController {
         chooseFilter();
     }
 }
+

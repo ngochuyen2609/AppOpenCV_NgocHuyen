@@ -1,9 +1,9 @@
 package com.example.demo4;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,25 +18,24 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class MainController {
+    @FXML
+    private Image image;
     private Stage stage;
-    private ImageView imageView;// chèn video
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
+    public Image getImage() {
+        return image;
     }
 
-    //Bắt sự kiện ấn vô nút Start
-//    public void start(ActionEvent event){
-//
-//    }
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
-
-    //Bắt sự kiện bấm vô chụp ảnh
-    public void clickCapture (ActionEvent event){
+    // Bắt sự kiện bấm vô chụp ảnh
+    public void clickCapture(ActionEvent event) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Choose a photo ");
         dialog.setHeaderText("Choose a photo from library");
@@ -44,23 +43,22 @@ public class MainController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20,150,10,10));
+        grid.setPadding(new Insets(20, 150, 10, 10));
 
         TextField name = new TextField();
         name.setPromptText("Name Picture");
 
-        grid.add(new Label("Name: "),0,0);
-        grid.add(name,1,0);
+        grid.add(new Label("Name: "), 0, 0);
+        grid.add(name, 1, 0);
 
         dialog.getDialogPane().setContent(grid);
 
-        ButtonType buttonYes = new ButtonType("Submit",ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(buttonYes,ButtonType.CANCEL);
+        ButtonType buttonYes = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(buttonYes, ButtonType.CANCEL);
 
-
-        //sau khi submit in ra thoong tin ddeer kieerm soats loix
-        dialog.setResultConverter(dialogButton->{
-            if (dialogButton == buttonYes){
+        // Sau khi submit in ra thông tin để kiểm soát lỗi
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == buttonYes) {
                 return name.getText();
             }
             return null;
@@ -68,37 +66,40 @@ public class MainController {
 
         Optional<String> result = dialog.showAndWait();
 
-        result.ifPresent(name1->{
-            System.out.println("File name :"+name.getText());
+        result.ifPresent(name1 -> {
+            System.out.println("File name :" + name.getText());
         });
     }
 
-    //Bắt sự kiện n vào nút chọn ảnh
-     public void clickChoose (ActionEvent event) {
-         FileChooser fileChooser = new FileChooser();
-         fileChooser.setTitle("Open Resource File");
+    public void clickChoose(ActionEvent event) {
+        chooseImage();
+    }
 
-         //Chỉ chọn ảnh kiểu .png .jpg .gif
-         fileChooser.getExtensionFilters().addAll(
-                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-         File selectedFile = fileChooser.showOpenDialog(stage);
-         if (selectedFile != null) {
-             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+    private void chooseImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+
+        // Chỉ chọn ảnh kiểu .png .jpg .gif
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 
             // Hiển thị ảnh đã chọn trong một stage mới
-             try {
-                 this.showImageInCurrentStage(selectedFile);
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-     }
+            try {
+                this.showImageInCurrentStage(selectedFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void showImageInCurrentStage(File file) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
         Parent root = loader.load();
 
-        //add controller
+        // add controller
         ImageViewController controller = loader.getController();
         Image image_new = new Image(file.toURI().toString());
         controller.setImage(image_new);
@@ -110,18 +111,18 @@ public class MainController {
 
         controller.setStage(stage);
 
-        //thêm css mới cho scene này
+        // thêm css mới cho scene này
         newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
     }
 
-    //Ấn vô nút Filter
-    public void clickFilter (ActionEvent event) throws IOException {
+    // Ấn vô nút Filter
+    public void clickFilter(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
         Parent root = loader.load();
 
-        //add controller
+        // add controller
         FilterController controller = loader.getController();
-        //set thêm ảnh
+        // set thêm ảnh
 
         Scene newScene = new Scene(root);
         stage.setScene(newScene);
@@ -129,7 +130,7 @@ public class MainController {
 
         controller.setStage(stage);
 
-        //thêm css mới cho scene này
+        // thêm css mới cho scene này
         newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
     }
 }
