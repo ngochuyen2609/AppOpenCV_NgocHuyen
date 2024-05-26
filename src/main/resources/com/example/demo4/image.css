@@ -1,0 +1,192 @@
+#image {
+    -fx-background-radius: 20px; /* Bo tròn các góc */
+    -fx-padding: 10px; /* Khoảng cách padding cho ảnh */
+    -fx-border-radius: 20%; /* Bo tròn biên */
+    -fx-border-width: 2px; /* Độ rộng của biên */
+    -fx-border-color: #e0a100; /* Màu của biên */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 0); /* Đổ bóng */
+}
+
+#back {
+    -fx-padding: 10px 20px;
+    -fx-border-width: 2px;
+    -fx-border-color: #2c2c2c;
+    -fx-background-color: #1a1a1a;/* Màu nền của nút */
+    -fx-text-fill: #ffffff;/* Màu chữ của nút */
+    -fx-font-size: 12px;
+    -fx-cursor: hand;/* Biến con trỏ thành dạng bàn tay khi di chuột vào */
+    -fx-border-radius: 20px;/* Độ cong của các góc */
+    -fx-transition-property: all;
+    -fx-transition-duration: 0.4s;
+    -fx-transition-timing-function: ease;
+    -fx-outline: none;
+    -fx-position: relative;
+    -fx-overflow: hidden;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0; /* Xóa đệm nền */
+}
+
+#back:hover::after {
+    -fx-scale-x: 4;
+    -fx-scale-y: 4;
+}
+
+#back:hover {
+    /* Màu nền khi di chuột vào */
+    -fx-border-color: #666666;
+    -fx-background-color: #292929;
+}
+
+#back:after {
+    -fx-content: "";
+    -fx-position: absolute;
+    -fx-top: 0;
+    -fx-left: 0;
+    -fx-width: 100%;
+    -fx-height: 100%;
+    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+    -fx-transition-property: transform;
+    -fx-transition-duration: 0.5s;
+    -fx-transition-timing-function: ease;
+}
+
+
+#layout_new {
+    -fx-background-color: #1a1a1a;
+}
+#image_layout {
+    -fx-background-color: #1a1a1a;
+}
+#choose {
+    -fx-padding: 10px 20px;
+    -fx-border-width: 2px;
+    -fx-border-color: #2c2c2c;
+    -fx-background-color: #1a1a1a;/* Màu nền của nút */
+    -fx-text-fill: #ffffff;/* Màu chữ của nút */
+    -fx-font-size: 12px;
+    -fx-cursor: hand;/* Biến con trỏ thành dạng bàn tay khi di chuột vào */
+    -fx-border-radius: 20px;/* Độ cong của các góc */
+    -fx-transition-property: all;
+    -fx-transition-duration: 0.4s;
+    -fx-transition-timing-function: ease;
+    -fx-outline: none;
+    -fx-position: relative;
+    -fx-overflow: hidden;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0; /* Xóa đệm nền */
+}
+
+#choose:hover::after {
+    -fx-scale-x: 4;
+    -fx-scale-y: 4;
+}
+
+#choose:hover {
+    /* Màu nền khi di chuột vào */
+    -fx-border-color: #666666;
+    -fx-background-color: #292929;
+}
+
+#choose:after {
+    -fx-content: "";
+    -fx-position: absolute;
+    -fx-top: 0;
+    -fx-left: 0;
+    -fx-width: 100%;
+    -fx-height: 100%;
+    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+    -fx-transition-property: transform;
+    -fx-transition-duration: 0.5s;
+    -fx-transition-timing-function: ease;
+}
+
+#detection{
+    -fx-padding: 10px 20px;
+    -fx-border-width: 4px;
+    -fx-border-color: #e0a100;
+    -fx-background-color: #1a1a1a;/* Màu nền của nút */
+    -fx-text-fill: #ffffff;/* Màu chữ của nút */
+    -fx-font-size: 12px;
+    -fx-cursor: hand;/* Biến con trỏ thành dạng bàn tay khi di chuột vào */
+    -fx-border-radius: 20px;/* Độ cong của các góc */
+    -fx-transition-property: all;
+    -fx-transition-duration: 0.4s;
+    -fx-transition-timing-function: ease;
+    -fx-outline: none;
+    -fx-position: relative;
+    -fx-overflow: hidden;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0; /* Xóa đệm nền */
+}
+
+#detection:hover::after {
+    -fx-scale-x: 4;
+    -fx-scale-y: 4;
+}
+
+#detection:hover {
+    /* Màu nền khi di chuột vào */
+    -fx-border-color: #666666;
+    -fx-background-color: #292929;
+}
+
+#detection:after {
+    -fx-content: "";
+    -fx-position: absolute;
+    -fx-top: 0;
+    -fx-left: 0;
+    -fx-width: 100%;
+    -fx-height: 100%;
+    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+    -fx-transition-property: transform;
+    -fx-transition-duration: 0.5s;
+    -fx-transition-timing-function: ease;
+}
+#filter {
+    -fx-padding: 5px 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: #2c2c2c;
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-border-radius: 20px;
+    -fx-transition-property: all;
+    -fx-transition-duration: 0.4s;
+    -fx-transition-timing-function: ease;
+    -fx-outline: none;
+    -fx-position: relative;
+    -fx-overflow: hidden;
+    -fx-font-weight: bold;
+}
+
+#filter:hover::after {
+    -fx-scale-x: 4; /* Thay thế scale(4) bằng -fx-scale-x và -fx-scale-y */
+    -fx-scale-y: 4;
+}
+
+#filter:hover {
+    -fx-border-color: #666666;
+    -fx-background-color: #292929;
+}
+
+#filter:after {
+    -fx-content: "";
+    -fx-position: absolute;
+    -fx-top: 0;
+    -fx-left: 0;
+    -fx-width: 100%;
+    -fx-height: 100%;
+    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+    -fx-scale-x: 0; /* Thay thế scale(0) bằng -fx-scale-x và -fx-scale-y */
+    -fx-scale-y: 0;
+    -fx-transition-property: transform;
+    -fx-transition-duration: 0.5s;
+    -fx-transition-timing-function: ease;
+}
