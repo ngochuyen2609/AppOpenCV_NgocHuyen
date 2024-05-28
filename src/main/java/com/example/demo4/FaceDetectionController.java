@@ -25,10 +25,6 @@ public class FaceDetectionController {
     private Button cameraButton;
     @FXML
     private ImageView originalFrame;
-    @FXML
-    private CheckBox haarClassifier;
-    @FXML
-    private CheckBox lbpClassifier;
     private ScheduledExecutorService timer;
     private VideoCapture capture = new VideoCapture();
     private boolean cameraActive;
@@ -46,8 +42,6 @@ public class FaceDetectionController {
         originalFrame.setPreserveRatio(true);
         if (!this.cameraActive)
         {
-            this.haarClassifier.setDisable(true);
-            this.lbpClassifier.setDisable(true);
 
             this.capture.open(0);
 
@@ -83,9 +77,6 @@ public class FaceDetectionController {
         {
             this.cameraActive = false;
             this.cameraButton.setText("Start Camera");
-
-            this.haarClassifier.setDisable(false);
-            this.lbpClassifier.setDisable(false);
 
             this.stopAcquisition();
             updateImageView(originalFrame, null);
@@ -143,33 +134,8 @@ public class FaceDetectionController {
             Imgproc.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0), 3);
 
     }
-    @FXML
-    protected void haarSelected(Event event)
-    {
-        // check whether the lpb checkbox is selected and deselect it
-        if (this.lbpClassifier.isSelected())
-            this.lbpClassifier.setSelected(false);
 
-        this.checkboxSelection("src/main/resources/org/source/facedetection/haarcascades/haarcascade_frontalface_alt.xml");
-    }
-    @FXML
-    protected void lbpSelected(Event event)
-    {
-        // check whether the haar checkbox is selected and deselect it
-        if (this.haarClassifier.isSelected())
-            this.haarClassifier.setSelected(false);
 
-        this.checkboxSelection("src/main/resources/org/source/facedetection/lbpcascades/lbpcascade_frontalface_improved.xml");
-    }
-
-    private void checkboxSelection(String classifierPath)
-    {
-        // load the classifier(s)
-        this.faceCascade.load(classifierPath);
-
-        // now the video capture can start
-        this.cameraButton.setDisable(false);
-    }
     private void stopAcquisition()
     {
         if (this.timer!=null && !this.timer.isShutdown())
