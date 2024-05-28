@@ -53,7 +53,7 @@
     -fx-border-width: 4px;
     -fx-border-color: #e0a100;
     -fx-background-color: #1a1a1a;
-    -fx-text-fill: #ffffff;
+    //-fx-text-fill: #ffffff;
     -fx-font-size: 12px;
     -fx-cursor: hand;
     -fx-border-radius: 20px;

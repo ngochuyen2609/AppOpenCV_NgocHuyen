@@ -5,6 +5,8 @@ module com.example.demo4 {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires java.desktop;
+    requires opencv;
+    requires javafx.swing;
 
     opens com.example.demo4 to javafx.fxml;
     exports com.example.demo4;
