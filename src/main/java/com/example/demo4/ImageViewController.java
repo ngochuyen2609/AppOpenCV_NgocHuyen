@@ -108,7 +108,7 @@ public class ImageViewController {
                 return;
             }
 
-            CascadeClassifier faceDetector = new CascadeClassifier("C:\\opencv\\build\\etc\\lbpcascades\\lbpcascade_frontalface_improved.xml");
+            CascadeClassifier faceDetector = new CascadeClassifier("src/main/resources/com/example/demo4/lbpcascades/lbpcascade_frontalface_improved.xml");
 
             if (faceDetector.empty()) {
                 System.out.println("Không thể tải bộ phân loại");
