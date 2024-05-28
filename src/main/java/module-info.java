@@ -7,7 +7,6 @@ module com.example.demo4 {
     requires java.desktop;
     requires opencv;
     requires javafx.swing;
-
     opens com.example.demo4 to javafx.fxml;
     exports com.example.demo4;
 }
