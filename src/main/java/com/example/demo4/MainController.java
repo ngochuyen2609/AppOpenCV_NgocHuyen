@@ -1,188 +1,158 @@
 package com.example.demo4;
 
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
-public class MainController {
-    @FXML
-    private Image image;
+import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
+
+public class MainController extends Utils {
+
     private Stage stage;
     @FXML
     private Button cameraButton;
     @FXML
     private ImageView originalFrame;
-    private ScheduledExecutorService timer;
-    private VideoCapture capture = new VideoCapture();
-    private boolean cameraActive;
-    private CascadeClassifier faceCascade = new CascadeClassifier("src/main/resources/com/example/demo4/lbpcascades/lbpcascade_frontalface_improved.xml");
+    @FXML
+    private StackPane stackPane;
+    @FXML
+    private Label lblnumber ;
+    String source = "C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
+    CascadeClassifier faceDetector = new CascadeClassifier(source);
+
+    private boolean isCameraActive = false;
+    private VideoCapture cameraCapture;
+    @FXML
+    private void startStopCamera(ActionEvent event) {
+        if (!isCameraActive) {
+            startCamera();
+            cameraButton.setText("Stop");
+        } else {
+            stopCamera();
+            cameraButton.setText("Start");
+            lblnumber.setText("Person Number");
+        }
+    }
+
+    private void startCamera() {
+         cameraCapture = new VideoCapture(0);
+        MatOfRect rostros = new MatOfRect();
+        Mat frame = new Mat();
+        Mat frame_gray = new Mat();
+        BufferedImage buff = null;
+
+        isCameraActive = true;
+
+        new Thread(() -> {
+            while (cameraCapture.read(frame)) {
+                if (frame.empty()) {
+                    System.out.println("No detection");
+                    break;
+                } else {
+                    try {
+                        Imgproc.cvtColor(frame, frame_gray, Imgproc.COLOR_BGR2GRAY);
+                        Imgproc.equalizeHist(frame_gray, frame_gray);
+                        double w = frame.width();
+                        double h = frame.height();
+                        faceDetector.detectMultiScale(frame_gray, rostros, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, new Size(30, 30), new Size(w, h));
+                        Rect[] facesArray = rostros.toArray();
+                        System.out.println("Số người có trong Camera: " + facesArray.length);
+
+                        for (int i = 0; i < facesArray.length; i++) {
+                            Point center = new Point((facesArray[i].x + facesArray[i].width * 0.5),
+                                    (facesArray[i].y + facesArray[i].height * 0.5));
+                            Imgproc.ellipse(frame,
+                                    center,
+                                    new Size(facesArray[i].width * 0.5, facesArray[i].height * 0.5),
+                                    0,
+                                    0,
+                                    360,
+                                    new Scalar(255, 0, 255), 4, 8, 0);
+
+                            Mat faceROI = frame_gray.submat(facesArray[i]);
+                            Imgproc.rectangle(frame,
+                                    new Point(facesArray[i].x, facesArray[i].y),
+                                    new Point(facesArray[i].x + facesArray[i].width, facesArray[i].y + facesArray[i].height),
+                                    new Scalar(123, 213, 23, 220));
+                            Imgproc.putText(frame, "this is person ",
+                                    new Point(facesArray[i].x, facesArray[i].y - 20), 1, 1, new Scalar(255, 255, 255));
+                        }
+
+                        Platform.runLater(() -> {
+                            int no = facesArray.length;
+                            lblnumber.setText("Have" + String.valueOf(no));
+
+                            MatOfByte mem = new MatOfByte();
+                            Imgcodecs.imencode(".bmp", frame, mem);
+                            InputStream in = new ByteArrayInputStream(mem.toArray());
+                            Image im = new Image(in);
+                            originalFrame.setImage(im);
+                        });
+                        Thread.sleep(50);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private void stopCamera() {
+        isCameraActive = false;
+        cameraCapture.release(); // Giải phóng tài nguyên camera
+        lblnumber.setText("Chua bat cam");
+        // Set originalFrame thành hình ảnh trống
+        Platform.runLater(() -> {
+            originalFrame.setImage(null);
+        });
+    }
+
+    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    private int absoluteFaceSize = 0;
+
     @FXML
-    protected void startCamera()
-    {
-        originalFrame.setPreserveRatio(true);
-        if (!this.cameraActive)
-        {
-
-            this.capture.open(0);
-
-            if (this.capture.isOpened())
-            {
-                this.cameraActive = true;
-
-                // 30fps
-                Runnable frameGrabber = new Runnable() {
-
-                    @Override
-                    public void run()
-                    {
-                        Mat frame = grabFrame();
-                        Image imageToShow = Utils.mat2Image(frame);
-                        updateImageView(originalFrame, imageToShow);
-                    }
-                };
-
-                this.timer = Executors.newSingleThreadScheduledExecutor();
-                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-
-                // update the button content
-                this.cameraButton.setText("Stop");
-            }
-            else
-            {
-                // log the error
-                System.err.println("Failed to open the camera connection...");
-            }
-        }
-        else
-        {
-            this.cameraActive = false;
-//            this.cameraButton.setText("Start");
-
-            this.stopAcquisition();
-            updateImageView(originalFrame, null);
-
-        }
-    }
-    private Mat grabFrame()
-    {
-        Mat frame = new Mat();
-
-        if (this.capture.isOpened())
-        {
-            try
-            {
-                this.capture.read(frame);
-
-                if (!frame.empty())
-                {
-                    this.detectAndDisplay(frame);
-                }
-
-            }
-            catch (Exception e)
-            {
-                System.err.println("Exception during the image elaboration: " + e);
-            }
-        }
-
-        return frame;
-    }
-
-    private void detectAndDisplay(Mat frame)
-    {
-        MatOfRect faces = new MatOfRect();
-        Mat grayFrame = new Mat();
-
-        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.equalizeHist(grayFrame, grayFrame);
-
-        if (this.absoluteFaceSize == 0)
-        {
-            int height = grayFrame.rows();
-            if (Math.round(height * 0.2f) > 0)
-            {
-                this.absoluteFaceSize = Math.round(height * 0.2f);
-            }
-        }
-
-        // detect faces
-        this.faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
-                new Size(this.absoluteFaceSize, this.absoluteFaceSize), new Size());
-
-        Rect[] facesArray = faces.toArray();
-        for (int i = 0; i < facesArray.length; i++)
-            Imgproc.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0), 3);
-
-    }
-
-
-    private void stopAcquisition()
-    {
-        if (this.timer!=null && !this.timer.isShutdown())
-        {
-            try
-            {
-                // stop the timer
-                this.timer.shutdown();
-                this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
-            }
-            catch (InterruptedException e)
-            {
-                // log any exception
-                System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
-            }
-        }
-
-        if (this.capture.isOpened())
-        {
-            // release the camera
-            this.capture.release();
-        }
-    }
-    private void updateImageView(ImageView view, Image image)
-    {
-        Utils.onFXThread(view.imageProperty(), image);
-    }
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
     public void clickCapture(ActionEvent event) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Choose a photo");
@@ -242,7 +212,7 @@ public class MainController {
 
             File copiedFile = new File(selectedFolderPath, "selected_image.jpg");
             try {
-                Files.copy(Paths.get(imagePath), copiedFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(Paths.get(imagePath), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -305,22 +275,27 @@ public class MainController {
     private BufferedImage matToBufferedImage(Mat mat) {
         int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
         BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
-        mat.get(0, 0, ((java.awt.image.DataBufferByte) image.getRaster().getDataBuffer()).getData());
+        mat.get(0, 0, ((DataBufferByte) image.getRaster().getDataBuffer()).getData());
         return image;
     }
-
+    @FXML
     public void clickFilter(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
-        Parent root = loader.load();
 
-        FilterController controller = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
+            Parent root = loader.load();
 
-        Scene newScene = new Scene(root);
-        stage.setScene(newScene);
-        stage.setTitle("Select Filter");
+            //add controller
+            FilterController controller = loader.getController();
+            //set thêm ảnh
 
-        controller.setStage(stage);
+            Scene newScene = new Scene(root);
+            stage.setScene(newScene);
+            stage.setTitle("Select Filter");
+            //thêm css mới cho scene này
+            newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
 
-        newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
+            //controller.setImage(lastImage);
+            controller.setStage(stage);
+            stage.show();;
     }
 }

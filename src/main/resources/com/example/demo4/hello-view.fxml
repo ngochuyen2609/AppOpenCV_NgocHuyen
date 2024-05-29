@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane id="root" prefHeight="638.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
+<AnchorPane id="root" prefHeight="651.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
    <children>
-      <Label id="person_num" layoutX="399.0" layoutY="14.0" prefHeight="17.0" prefWidth="104.0" text="Person number" />
-      <Button id="takeAPhoto" fx:id="takeAPhoto" layoutX="549.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" />
+      <Label id="person_num" fx:id="lblnumber" layoutX="399.0" layoutY="14.0" prefHeight="17.0" prefWidth="104.0" text="Person number" />
+      <Button id="takeAPhoto" fx:id="takeAPhoto" layoutX="473.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" />
       <Button id="choose" layoutX="112.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickChoose" text="Choose a photo" />
-      <Button id="start" fx:id="cameraButton" layoutX="352.0" layoutY="580.0" mnemonicParsing="false" onAction="#startCamera" text="Start" />
-      <StackPane fx:id="imagePane" layoutX="6.0" layoutY="45.0" prefHeight="473.0" prefWidth="738.0">
+      <Button id="start" fx:id="cameraButton" layoutX="327.0" layoutY="580.0" mnemonicParsing="false" onAction="#startStopCamera" text="Start" />
+      <StackPane fx:id="stackPane" layoutX="6.0" layoutY="45.0" prefHeight="474.0" prefWidth="626.0">
          <children>
-            <ImageView fx:id="originalFrame" fitHeight="474.0" fitWidth="541.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="originalFrame" fitHeight="462.0" fitWidth="606.0" pickOnBounds="true" preserveRatio="true" />
          </children></StackPane>
-      <Button fx:id="filter" layoutX="710.0" layoutY="525.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
+      <Button fx:id="filter" layoutX="604.0" layoutY="529.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
    </children>
 </AnchorPane>

@@ -1,0 +1,997 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH__Changes_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH__Changes_.xml
+new file mode 100644
+--- /dev/null	(date 1716976160964)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH__Changes_.xml	(date 1716976160964)
+@@ -0,0 +1,14 @@
++<changelist name="Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]" date="1716976048587" recycled="false" toDelete="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 29/05/2024 4:47 CH [Changes]" />
++  <binary>
++    <option name="BEFORE_PATH" value="selected/selected_image.jpg" />
++    <option name="AFTER_PATH" value="selected/selected_image.jpg" />
++    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/selected_image.jpg" />
++  </binary>
++  <binary>
++    <option name="BEFORE_PATH" value="selected/output.jpg" />
++    <option name="AFTER_PATH" value="selected/output.jpg" />
++    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/output.jpg" />
++  </binary>
++</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch
+new file mode 100644
+--- /dev/null	(date 1716976048571)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch	(date 1716976048571)
+@@ -0,0 +1,661 @@
++Index: src/main/java/com/example/demo4/ZoomablePane.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/ZoomablePane.java b/src/main/java/com/example/demo4/ZoomableImageView.java
++rename from src/main/java/com/example/demo4/ZoomablePane.java
++rename to src/main/java/com/example/demo4/ZoomableImageView.java
++--- a/src/main/java/com/example/demo4/ZoomablePane.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/ZoomableImageView.java	(date 1716914727394)
++@@ -3,20 +3,16 @@
++ import javafx.scene.image.ImageView;
++ import javafx.scene.input.MouseEvent;
++ import javafx.scene.input.ScrollEvent;
++-import javafx.scene.layout.StackPane;
++ 
++-public class ZoomablePane extends StackPane {
++-    private ImageView imageView;
+++public class ZoomableImageView extends ImageView {
++     private double scale = 1.0;
+++    private double initialX;
+++    private double initialY;
++     private double offsetX = 0;
++     private double offsetY = 0;
++-    private double initialX = 0;
++-    private double initialY = 0;
++ 
++-    public ZoomablePane(ImageView imageView) {
++-        this.imageView = imageView;
++-        getChildren().add(imageView);
++-
+++    public ZoomableImageView() {
+++        setPreserveRatio(true);
++         setOnScroll(this::handleScroll);
++         setOnMousePressed(this::handleMousePressed);
++         setOnMouseDragged(this::handleMouseDragged);
++@@ -53,26 +49,9 @@
++     }
++ 
++     private void updateImageView() {
++-        imageView.setScaleX(scale);
++-        imageView.setScaleY(scale);
++-        imageView.setTranslateX(offsetX);
++-        imageView.setTranslateY(offsetY);
++-    }
++-
++-    public void zoomToFit() {
++-        double paneWidth = getWidth();
++-        double paneHeight = getHeight();
++-        double imgWidth = imageView.getImage().getWidth();
++-        double imgHeight = imageView.getImage().getHeight();
++-
++-        double scaleX = paneWidth / imgWidth;
++-        double scaleY = paneHeight / imgHeight;
++-
++-        scale = Math.min(scaleX, scaleY);
++-
++-        offsetX = 0;
++-        offsetY = 0;
++-
++-        updateImageView();
+++        setScaleX(scale);
+++        setScaleY(scale);
+++        setTranslateX(offsetX);
+++        setTranslateY(offsetY);
++     }
++ }
++Index: src/main/java/com/example/demo4/ImageViewController.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.demo4;\r\n\r\nimport javafx.embed.swing.SwingFXUtils;\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.image.Image;\r\nimport javafx.scene.image.ImageView;\r\nimport javafx.scene.image.WritableImage;\r\nimport javafx.stage.FileChooser;\r\nimport javafx.stage.Stage;\r\nimport org.opencv.core.*;\r\nimport org.opencv.imgcodecs.Imgcodecs;\r\nimport org.opencv.imgproc.Imgproc;\r\nimport org.opencv.objdetect.CascadeClassifier;\r\n\r\nimport java.awt.image.BufferedImage;\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Paths;\r\n\r\npublic class ImageViewController {\r\n\r\n    @FXML\r\n    private ImageView image;\r\n    private Stage stage;\r\n    private Image lastImage;\r\n\r\n    public void setStage(Stage stage) {\r\n        this.stage = stage;\r\n    }\r\n\r\n    public ImageView getImage() {\r\n        return image;\r\n    }\r\n\r\n\r\n    public void setImage(Image a) {\r\n        image.setImage(a);\r\n        image.getStyleClass().add(\"image\");\r\n        this.lastImage = a; // Cập nhật ảnh gần nhất\r\n    }\r\n\r\n    public  Image getLatestImage() {\r\n        return lastImage; // Trả về ảnh gần nhất\r\n    }\r\n\r\n    // Sự kiện quay lại cảnh trước\r\n    public void backScene(ActionEvent event) {\r\n        try {\r\n            FXMLLoader loader = new FXMLLoader(getClass().getResource(\"hello-view.fxml\"));\r\n            Parent root = loader.load();\r\n\r\n            MainController controller = loader.getController();\r\n            controller.setStage(stage);\r\n\r\n            Scene scene = new Scene(root);\r\n\r\n            // Thêm CSS\r\n            scene.getStylesheets().add(getClass().getResource(\"takeAPhoto.css\").toExternalForm());\r\n\r\n            stage.setTitle(\"Test Frontend\");\r\n            stage.setScene(scene);\r\n            stage.show();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void clickChoose(ActionEvent event) {\r\n        chooseImage();\r\n    }\r\n\r\n    // Sự kiện chọn ảnh\r\n    private void chooseImage() {\r\n        FileChooser fileChooser = new FileChooser();\r\n        fileChooser.setTitle(\"Open Resource File\");\r\n\r\n        fileChooser.getExtensionFilters().addAll(\r\n                new FileChooser.ExtensionFilter(\"Image Files\", \"*.png\", \"*.jpg\", \"*.gif\"));\r\n        File selectedFile = fileChooser.showOpenDialog(stage);\r\n\r\n        if (selectedFile != null) {\r\n            String imagePath = selectedFile.getAbsolutePath();\r\n            String selectedFolderPath = \"selected\";\r\n            String outputImagePath = selectedFolderPath + \"/output.jpg\";\r\n\r\n            File selectedFolder = new File(selectedFolderPath);\r\n            if (!selectedFolder.exists()) {\r\n                selectedFolder.mkdir();\r\n            }\r\n\r\n            File copiedFile = new File(selectedFolderPath, \"selected_image.jpg\");\r\n            try {\r\n                Files.copy(Paths.get(imagePath), copiedFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);\r\n            } catch (IOException e) {\r\n                e.printStackTrace();\r\n                return;\r\n            }\r\n\r\n            Mat src = Imgcodecs.imread(copiedFile.getAbsolutePath());\r\n\r\n            if (src.empty()) {\r\n                System.out.println(\"Không thể mở ảnh: \" + copiedFile.getAbsolutePath());\r\n                return;\r\n            }\r\n\r\n            CascadeClassifier faceDetector = new CascadeClassifier(\"C:\\\\opencv\\\\build\\\\etc\\\\lbpcascades\\\\lbpcascade_frontalface_improved.xml\");\r\n\r\n            if (faceDetector.empty()) {\r\n                System.out.println(\"Không thể tải bộ phân loại\");\r\n                return;\r\n            }\r\n\r\n            MatOfRect faceDetections = new MatOfRect();\r\n            faceDetector.detectMultiScale(src, faceDetections);\r\n\r\n            for (Rect rect : faceDetections.toArray()) {\r\n                Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),\r\n                        new Scalar(0, 255, 0), 3);\r\n            }\r\n\r\n            Imgcodecs.imwrite(outputImagePath, src);\r\n\r\n            BufferedImage bufferedImage = matToBufferedImage(src);\r\n            WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);\r\n\r\n            try {\r\n                FXMLLoader loader = new FXMLLoader(getClass().getResource(\"image-view.fxml\"));\r\n                Parent root = loader.load();\r\n\r\n                ImageViewController controller = loader.getController();\r\n                controller.setImage(resultImage);\r\n                controller.setStage(stage);\r\n                Scene newScene = new Scene(root);\r\n\r\n                newScene.getStylesheets().add(getClass().getResource(\"image.css\").toExternalForm());\r\n                stage.setScene(newScene);\r\n                stage.setTitle(\"Selected Image\");\r\n                stage.show();\r\n            } catch (IOException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n    }\r\n\r\n    private BufferedImage matToBufferedImage(Mat mat) {\r\n        int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;\r\n        BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);\r\n        mat.get(0, 0, ((java.awt.image.DataBufferByte) image.getRaster().getDataBuffer()).getData());\r\n        return image;\r\n    }\r\n\r\n\r\n    private void showImageInCurrentStage(File file) throws IOException {\r\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"image-view.fxml\"));\r\n        Parent root = loader.load();\r\n\r\n        //add controller\r\n        ImageViewController controller = loader.getController();\r\n        Image image_new = new Image(file.toURI().toString());\r\n\r\n\r\n        controller.setImage(image_new);\r\n\r\n        Scene newScene = new Scene(root);\r\n\r\n        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại\r\n        stage.setTitle(\"Selected Image\");\r\n\r\n        controller.setStage(stage);\r\n\r\n        //thêm css mới cho scene này\r\n        newScene.getStylesheets().add(getClass().getResource(\"image.css\").toExternalForm());\r\n    }\r\n\r\n\r\n    public void clickFilter (ActionEvent event) throws IOException {\r\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"filterImage-view.fxml\"));\r\n        Parent root = loader.load();\r\n\r\n        //add controller\r\n        FilterImageController controller = loader.getController();\r\n        //set thêm ảnh\r\n\r\n        Scene newScene = new Scene(root);\r\n        stage.setScene(newScene);\r\n        stage.setTitle(\"Select Filter\");\r\n\r\n        controller.setImage(lastImage);\r\n        controller.setStage(stage);\r\n\r\n\r\n        //thêm css mới cho scene này\r\n        newScene.getStylesheets().add(getClass().getResource(\"filterImage.css\").toExternalForm());\r\n    }\r\n\r\n}\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/ImageViewController.java b/src/main/java/com/example/demo4/ImageViewController.java
++--- a/src/main/java/com/example/demo4/ImageViewController.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/ImageViewController.java	(date 1716948031640)
++@@ -9,9 +9,11 @@
++ import javafx.scene.image.Image;
++ import javafx.scene.image.ImageView;
++ import javafx.scene.image.WritableImage;
+++import javafx.scene.layout.StackPane;
++ import javafx.stage.FileChooser;
++ import javafx.stage.Stage;
++ import org.opencv.core.*;
+++import org.opencv.core.Point;
++ import org.opencv.imgcodecs.Imgcodecs;
++ import org.opencv.imgproc.Imgproc;
++ import org.opencv.objdetect.CascadeClassifier;
++@@ -24,31 +26,38 @@
++ 
++ public class ImageViewController {
++ 
+++    @FXML
+++    private StackPane image_layout;
+++
++     @FXML
++     private ImageView image;
+++
++     private Stage stage;
++-    private Image lastImage;
+++    private ImageView lastImage;
++ 
+++    static {
+++        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+++    }
+++    public  StackPane getImage_layout(){
+++        return image_layout;
+++    }
++     public void setStage(Stage stage) {
++         this.stage = stage;
++     }
++ 
++-    public ImageView getImage() {
++-        return image;
++-    }
++-
++-
++-    public void setImage(Image a) {
++-        image.setImage(a);
++-        image.getStyleClass().add("image");
++-        this.lastImage = a; // Cập nhật ảnh gần nhất
+++    public void setImageView(Image a) {
+++        if (lastImage == null) {
+++            lastImage = new ImageView();
+++            image_layout.getChildren().add(lastImage);
+++        }
+++        lastImage.setImage(a);
++     }
++ 
++-    public  Image getLatestImage() {
++-        return lastImage; // Trả về ảnh gần nhất
+++    public ImageView getLatestImage() {
+++        return lastImage;
++     }
++-
++     // Sự kiện quay lại cảnh trước
+++    @FXML
++     public void backScene(ActionEvent event) {
++         try {
++             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
++@@ -70,11 +79,12 @@
++         }
++     }
++ 
+++    // Sự kiện chọn ảnh
+++    @FXML
++     public void clickChoose(ActionEvent event) {
++         chooseImage();
++     }
++ 
++-    // Sự kiện chọn ảnh
++     private void chooseImage() {
++         FileChooser fileChooser = new FileChooser();
++         fileChooser.setTitle("Open Resource File");
++@@ -127,23 +137,34 @@
++ 
++             BufferedImage bufferedImage = matToBufferedImage(src);
++             WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
+++            // Hiển thị ảnh kết quả, truyền stage vào phương thức này
+++            displayImage( resultImage);
+++        }
+++    }
++ 
++-            try {
++-                FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
++-                Parent root = loader.load();
+++    private void displayImage( WritableImage resultImage) {
+++        try {
+++            FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
+++            Parent root = loader.load();
++ 
++-                ImageViewController controller = loader.getController();
++-                controller.setImage(resultImage);
++-                controller.setStage(stage);
++-                Scene newScene = new Scene(root);
+++            ImageViewController controller = loader.getController();
+++            controller.setStage(stage);
+++
+++            Scene newScene = new Scene(root);
++ 
++-                newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
++-                stage.setScene(newScene);
++-                stage.setTitle("Selected Image");
++-                stage.show();
++-            } catch (IOException e) {
++-                e.printStackTrace();
++-            }
+++            ZoomableImageView zoomableImageView = new ZoomableImageView();
+++            zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
+++            zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
+++            zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
+++            zoomableImageView.setPreserveRatio(true);
+++
+++            controller.getImage_layout().getChildren().add(zoomableImageView);
+++            newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
+++            stage.setScene(newScene);
+++            stage.setTitle("Selected Image");
+++            stage.show();
+++        } catch (IOException e) {
+++            e.printStackTrace();
++         }
++     }
++ 
++@@ -155,29 +176,29 @@
++     }
++ 
++ 
++-    private void showImageInCurrentStage(File file) throws IOException {
++-        FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
++-        Parent root = loader.load();
++-
++-        //add controller
++-        ImageViewController controller = loader.getController();
++-        Image image_new = new Image(file.toURI().toString());
++-
++-
++-        controller.setImage(image_new);
++-
++-        Scene newScene = new Scene(root);
++-
++-        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
++-        stage.setTitle("Selected Image");
++-
++-        controller.setStage(stage);
++-
++-        //thêm css mới cho scene này
++-        newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
++-    }
+++//    private void showImageInCurrentStage(File file) throws IOException {
+++//        FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
+++//        Parent root = loader.load();
+++//
+++//        //add controller
+++//        ImageViewController controller = loader.getController();
+++//        Image image_new = new Image(file.toURI().toString());
+++//
+++//
+++//        controller.setImage(image_new);
+++//
+++//        Scene newScene = new Scene(root);
+++//
+++//        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
+++//        stage.setTitle("Selected Image");
+++//
+++//        controller.setStage(stage);
+++//
+++//        //thêm css mới cho scene này
+++//        newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
+++//    }
++ 
++-
+++    @FXML
++     public void clickFilter (ActionEvent event) throws IOException {
++         FXMLLoader loader = new FXMLLoader(getClass().getResource("filterImage-view.fxml"));
++         Parent root = loader.load();
++@@ -190,7 +211,7 @@
++         stage.setScene(newScene);
++         stage.setTitle("Select Filter");
++ 
++-        controller.setImage(lastImage);
+++        controller.setImage(image.getImage());
++         controller.setStage(stage);
++ 
++ 
++Index: src/main/java/com/example/demo4/FilterImageController.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.demo4;\r\n\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.image.Image;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class FilterImageController {\r\n\r\n    private Stage stage;\r\n    private Image image;\r\n\r\n    public void setStage(Stage stage) {\r\n        this.stage = stage;\r\n    }\r\n\r\n    public void setImage (Image image) {\r\n        this.image = image;\r\n    }\r\n\r\n    public void chooseFilter() {\r\n        try {\r\n            FXMLLoader loader = new FXMLLoader(getClass().getResource(\"image-view.fxml\"));\r\n            Parent root = loader.load();\r\n\r\n            ImageViewController controller = loader.getController();\r\n            controller.setStage(stage);\r\n            controller.setImage(image); // Sử dụng ảnh gần nhất\r\n            Scene scene = new Scene(root);\r\n\r\n            // Thêm CSS\r\n            scene.getStylesheets().add(getClass().getResource(\"image.css\").toExternalForm());\r\n            stage.setTitle(\"Test Filter\");\r\n            stage.setScene(scene);\r\n            stage.show();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void clickFilter1(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter2(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter3(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter4(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n}\r\n\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/FilterImageController.java b/src/main/java/com/example/demo4/FilterImageController.java
++--- a/src/main/java/com/example/demo4/FilterImageController.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/FilterImageController.java	(date 1716909465574)
++@@ -30,7 +30,7 @@
++ 
++             ImageViewController controller = loader.getController();
++             controller.setStage(stage);
++-            controller.setImage(image); // Sử dụng ảnh gần nhất
+++            controller.setImageView(image); // Sử dụng ảnh gần nhất
++             Scene scene = new Scene(root);
++ 
++             // Thêm CSS
++Index: src/main/resources/com/example/demo4/image-view.fxml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.image.ImageView?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.StackPane?>\r\n\r\n<AnchorPane fx:id=\"layout_new\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"586.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/21\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.demo4.ImageViewController\">\r\n   <children>\r\n      <Button fx:id=\"detection\" layoutX=\"278.0\" layoutY=\"524.0\" text=\"Detection\" AnchorPane.bottomAnchor=\"36.39999999999998\" AnchorPane.leftAnchor=\"278.0\" />\r\n      <Button fx:id=\"choose\" layoutX=\"80.0\" layoutY=\"524.0\" onAction=\"#clickChoose\" text=\"Choose image\" AnchorPane.bottomAnchor=\"36.39999999999998\" AnchorPane.leftAnchor=\"80.0\" />\r\n      <Button fx:id=\"back\" layoutX=\"463.0\" layoutY=\"524.0\" onAction=\"#backScene\" text=\"Back\" AnchorPane.bottomAnchor=\"36.39999999999998\" AnchorPane.leftAnchor=\"463.0\" />\r\n      <StackPane fx:id=\"image_layout\" layoutX=\"11.2\" prefHeight=\"472.0\" prefWidth=\"579.0\" AnchorPane.bottomAnchor=\"128.0\" AnchorPane.leftAnchor=\"11.0\" AnchorPane.rightAnchor=\"10.0\" AnchorPane.topAnchor=\"10.0\">\r\n         <children>\r\n            <ImageView fx:id=\"image\" fitHeight=\"477.0\" fitWidth=\"572.0\" pickOnBounds=\"true\" preserveRatio=\"true\" />\r\n         </children>\r\n      </StackPane>\r\n      <Button fx:id=\"filter\" layoutX=\"566.0\" layoutY=\"483.0\" onAction=\"#clickFilter\" text=\":\" AnchorPane.bottomAnchor=\"77.39999999999998\" AnchorPane.rightAnchor=\"14.799999999999955\" />\r\n   </children>\r\n</AnchorPane>\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/resources/com/example/demo4/image-view.fxml b/src/main/resources/com/example/demo4/image-view.fxml
++--- a/src/main/resources/com/example/demo4/image-view.fxml	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/resources/com/example/demo4/image-view.fxml	(date 1716951994008)
++@@ -8,13 +8,13 @@
++ <AnchorPane fx:id="layout_new" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="586.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.ImageViewController">
++    <children>
++       <Button fx:id="detection" layoutX="278.0" layoutY="524.0" text="Detection" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="278.0" />
++-      <Button fx:id="choose" layoutX="80.0" layoutY="524.0" onAction="#clickChoose" text="Choose image" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="80.0" />
+++      <Button fx:id="choose" layoutX="71.0" layoutY="524.0" onAction="#clickChoose" text="Choose image" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="71.0" />
++       <Button fx:id="back" layoutX="463.0" layoutY="524.0" onAction="#backScene" text="Back" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="463.0" />
++-      <StackPane fx:id="image_layout" layoutX="11.2" prefHeight="472.0" prefWidth="579.0" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+++      <Button fx:id="filter" layoutX="566.0" layoutY="483.0" onAction="#clickFilter" prefHeight="14.0" prefWidth="11.0" text=":" AnchorPane.bottomAnchor="78.0" AnchorPane.rightAnchor="14.0" />
+++      <StackPane fx:id="image_layout" alignment="CENTER" layoutX="15.0" layoutY="14.0" maxHeight="466.0" maxWidth="570.0" prefHeight="440.0" prefWidth="570.0" AnchorPane.bottomAnchor="132.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0">
++          <children>
++-            <ImageView fx:id="image" fitHeight="477.0" fitWidth="572.0" pickOnBounds="true" preserveRatio="true" />
+++            <ImageView fx:id="image" fitHeight="398.0" fitWidth="547.0" pickOnBounds="true" preserveRatio="true" />
++          </children>
++       </StackPane>
++-      <Button fx:id="filter" layoutX="566.0" layoutY="483.0" onAction="#clickFilter" text=":" AnchorPane.bottomAnchor="77.39999999999998" AnchorPane.rightAnchor="14.799999999999955" />
++    </children>
++ </AnchorPane>
++Index: src/main/java/com/example/demo4/Application.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.demo4;\r\n\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class Application extends javafx.application.Application {\r\n    @Override\r\n    public void start(Stage stage) throws IOException {\r\n        try {\r\n            //Thêm fxml\r\n            FXMLLoader loader =new FXMLLoader(getClass().getResource(\"hello-view.fxml\"));\r\n            Parent root = loader.load();\r\n            Scene scene = new Scene(root);\r\n\r\n            // Truyền tham chiếu của stage vào MainController\r\n            MainController controller = loader.getController();\r\n            controller.setStage(stage);\r\n\r\n            //thêm css\r\n            scene.getStylesheets().add(getClass().getResource(\"takeAPhoto.css\").toExternalForm());\r\n            scene.getStylesheets().forEach(System.out::println);\r\n\r\n            stage.setTitle(\"Test Frontend\");\r\n            stage.setScene(scene);\r\n            stage.show();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public static void main(String[] args) {\r\n        launch();\r\n    }\r\n}\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/Application.java b/src/main/java/com/example/demo4/Application.java
++--- a/src/main/java/com/example/demo4/Application.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/Application.java	(date 1716898244622)
++@@ -35,4 +35,5 @@
++     public static void main(String[] args) {
++         launch();
++     }
+++
++ }
++Index: src/main/java/com/example/demo4/MainController.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.demo4;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.embed.swing.SwingFXUtils;\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.geometry.Insets;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.layout.GridPane;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.image.Image;\r\nimport javafx.scene.image.ImageView;\r\nimport javafx.scene.image.WritableImage;\r\nimport javafx.stage.FileChooser;\r\nimport javafx.stage.Stage;\r\nimport org.opencv.core.*;\r\nimport org.opencv.imgcodecs.Imgcodecs;\r\nimport org.opencv.imgproc.Imgproc;\r\nimport org.opencv.objdetect.CascadeClassifier;\r\n\r\nimport java.awt.image.BufferedImage;\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Paths;\r\nimport java.util.Optional;\r\n\r\npublic class MainController {\r\n    @FXML\r\n    private Image image;\r\n    private Stage stage;\r\n\r\n    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }\r\n\r\n    public void setStage(Stage stage) {\r\n        this.stage = stage;\r\n    }\r\n\r\n    public Image getImage() {\r\n        return image;\r\n    }\r\n\r\n    public void setImage(Image image) {\r\n        this.image = image;\r\n    }\r\n\r\n    public void clickCapture(ActionEvent event) {\r\n        Dialog<String> dialog = new Dialog<>();\r\n        dialog.setTitle(\"Choose a photo\");\r\n        dialog.setHeaderText(\"Choose a photo from library\");\r\n\r\n        GridPane grid = new GridPane();\r\n        grid.setHgap(10);\r\n        grid.setVgap(10);\r\n        grid.setPadding(new Insets(20, 150, 10, 10));\r\n\r\n        TextField name = new TextField();\r\n        name.setPromptText(\"Name Picture\");\r\n\r\n        grid.add(new Label(\"Name: \"), 0, 0);\r\n        grid.add(name, 1, 0);\r\n\r\n        dialog.getDialogPane().setContent(grid);\r\n\r\n        ButtonType buttonYes = new ButtonType(\"Submit\", ButtonBar.ButtonData.OK_DONE);\r\n        dialog.getDialogPane().getButtonTypes().addAll(buttonYes, ButtonType.CANCEL);\r\n\r\n        dialog.setResultConverter(dialogButton -> {\r\n            if (dialogButton == buttonYes) {\r\n                return name.getText();\r\n            }\r\n            return null;\r\n        });\r\n\r\n        Optional<String> result = dialog.showAndWait();\r\n\r\n        result.ifPresent(name1 -> {\r\n            System.out.println(\"File name :\" + name.getText());\r\n        });\r\n    }\r\n\r\n    public void clickChoose(ActionEvent event) {\r\n        chooseImage();\r\n    }\r\n\r\n    private void chooseImage() {\r\n        FileChooser fileChooser = new FileChooser();\r\n        fileChooser.setTitle(\"Open Resource File\");\r\n\r\n        fileChooser.getExtensionFilters().addAll(\r\n                new FileChooser.ExtensionFilter(\"Image Files\", \"*.png\", \"*.jpg\", \"*.gif\"));\r\n        File selectedFile = fileChooser.showOpenDialog(stage);\r\n\r\n        if (selectedFile != null) {\r\n            String imagePath = selectedFile.getAbsolutePath();\r\n            String selectedFolderPath = \"selected\";\r\n            String outputImagePath = selectedFolderPath + \"/output.jpg\";\r\n\r\n            File selectedFolder = new File(selectedFolderPath);\r\n            if (!selectedFolder.exists()) {\r\n                selectedFolder.mkdir();\r\n            }\r\n\r\n            File copiedFile = new File(selectedFolderPath, \"selected_image.jpg\");\r\n            try {\r\n                Files.copy(Paths.get(imagePath), copiedFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);\r\n            } catch (IOException e) {\r\n                e.printStackTrace();\r\n                return;\r\n            }\r\n\r\n            Mat src = Imgcodecs.imread(copiedFile.getAbsolutePath());\r\n\r\n            if (src.empty()) {\r\n                System.out.println(\"Không thể mở ảnh: \" + copiedFile.getAbsolutePath());\r\n                return;\r\n            }\r\n\r\n            CascadeClassifier faceDetector = new CascadeClassifier(\"C:\\\\opencv\\\\build\\\\etc\\\\lbpcascades\\\\lbpcascade_frontalface_improved.xml\");\r\n\r\n            if (faceDetector.empty()) {\r\n                System.out.println(\"Không thể tải bộ phân loại\");\r\n                return;\r\n            }\r\n\r\n            MatOfRect faceDetections = new MatOfRect();\r\n            faceDetector.detectMultiScale(src, faceDetections);\r\n\r\n            for (Rect rect : faceDetections.toArray()) {\r\n                Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),\r\n                        new Scalar(0, 255, 0), 3);\r\n            }\r\n\r\n            Imgcodecs.imwrite(outputImagePath, src);\r\n\r\n            BufferedImage bufferedImage = matToBufferedImage(src);\r\n            WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);\r\n\r\n            try {\r\n                FXMLLoader loader = new FXMLLoader(getClass().getResource(\"image-view.fxml\"));\r\n                Parent root = loader.load();\r\n\r\n                ImageViewController controller = loader.getController();\r\n                controller.setImage(resultImage);\r\n                controller.setStage(stage);\r\n                Scene newScene = new Scene(root);\r\n\r\n                newScene.getStylesheets().add(getClass().getResource(\"image.css\").toExternalForm());\r\n                stage.setScene(newScene);\r\n                stage.setTitle(\"Selected Image\");\r\n                stage.show();\r\n            } catch (IOException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n    }\r\n\r\n    private BufferedImage matToBufferedImage(Mat mat) {\r\n        int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;\r\n        BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);\r\n        mat.get(0, 0, ((java.awt.image.DataBufferByte) image.getRaster().getDataBuffer()).getData());\r\n        return image;\r\n    }\r\n\r\n    public void clickFilter(ActionEvent event) throws IOException {\r\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"filter-view.fxml\"));\r\n        Parent root = loader.load();\r\n\r\n        FilterController controller = loader.getController();\r\n\r\n        Scene newScene = new Scene(root);\r\n        stage.setScene(newScene);\r\n        stage.setTitle(\"Select Filter\");\r\n\r\n        controller.setStage(stage);\r\n\r\n        newScene.getStylesheets().add(getClass().getResource(\"filter.css\").toExternalForm());\r\n    }\r\n}\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/MainController.java b/src/main/java/com/example/demo4/MainController.java
++--- a/src/main/java/com/example/demo4/MainController.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/MainController.java	(date 1716973011668)
++@@ -1,24 +1,25 @@
++ package com.example.demo4;
++ 
++-import javafx.application.Application;
++ import javafx.embed.swing.SwingFXUtils;
++ import javafx.event.ActionEvent;
++ import javafx.fxml.FXML;
++ import javafx.fxml.FXMLLoader;
++ import javafx.geometry.Insets;
++ import javafx.scene.Parent;
+++import javafx.scene.image.ImageView;
++ import javafx.scene.layout.GridPane;
++ import javafx.scene.Scene;
++ import javafx.scene.control.*;
++ import javafx.scene.image.Image;
++-import javafx.scene.image.ImageView;
++ import javafx.scene.image.WritableImage;
+++import javafx.scene.layout.StackPane;
++ import javafx.stage.FileChooser;
++ import javafx.stage.Stage;
++ import org.opencv.core.*;
++ import org.opencv.imgcodecs.Imgcodecs;
++ import org.opencv.imgproc.Imgproc;
++ import org.opencv.objdetect.CascadeClassifier;
+++import org.opencv.videoio.VideoCapture;
++ 
++ import java.awt.image.BufferedImage;
++ import java.io.File;
++@@ -26,26 +27,30 @@
++ import java.nio.file.Files;
++ import java.nio.file.Paths;
++ import java.util.Optional;
+++import java.util.concurrent.Executors;
+++import java.util.concurrent.ScheduledExecutorService;
+++import java.util.concurrent.TimeUnit;
++ 
++-public class MainController {
+++public class MainController extends FaceDetectionController {
+++
+++    private Stage stage;
++     @FXML
++-    private Image image;
++-    private Stage stage;
+++    private Button cameraButton;
+++    @FXML
+++    private ImageView originalFrame;
++ 
+++    private VideoCapture capture = new VideoCapture();
+++    private ScheduledExecutorService timer;
+++    private boolean cameraActive;
+++    private int absoluteFaceSize = 0;
+++    private CascadeClassifier faceCascade;
++     static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
++ 
++     public void setStage(Stage stage) {
++         this.stage = stage;
++     }
++ 
++-    public Image getImage() {
++-        return image;
++-    }
++-
++-    public void setImage(Image image) {
++-        this.image = image;
++-    }
++-
+++    @FXML
++     public void clickCapture(ActionEvent event) {
++         Dialog<String> dialog = new Dialog<>();
++         dialog.setTitle("Choose a photo");
++@@ -81,6 +86,7 @@
++         });
++     }
++ 
+++    @FXML
++     public void clickChoose(ActionEvent event) {
++         chooseImage();
++     }
++@@ -137,23 +143,35 @@
++ 
++             BufferedImage bufferedImage = matToBufferedImage(src);
++             WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
+++            // Hiển thị ảnh kết quả, truyền stage vào phương thức này
+++            displayImage( resultImage);
+++        }
+++    }
++ 
++-            try {
++-                FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
++-                Parent root = loader.load();
+++    private void displayImage( WritableImage resultImage) {
+++        try {
+++            FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
+++            Parent root = loader.load();
++ 
++-                ImageViewController controller = loader.getController();
++-                controller.setImage(resultImage);
++-                controller.setStage(stage);
++-                Scene newScene = new Scene(root);
+++            ImageViewController controller = loader.getController();
+++            controller.setStage(stage);
+++
+++            Scene newScene = new Scene(root);
++ 
++-                newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
++-                stage.setScene(newScene);
++-                stage.setTitle("Selected Image");
++-                stage.show();
++-            } catch (IOException e) {
++-                e.printStackTrace();
++-            }
+++            ZoomableImageView zoomableImageView = new ZoomableImageView();
+++            zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
+++            zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
+++            zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
+++            zoomableImageView.setPreserveRatio(true);
+++
+++            controller.getImage_layout().getChildren().add(zoomableImageView);
+++
+++            newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
+++            stage.setScene(newScene);
+++            stage.setTitle("Selected Image");
+++            stage.show();
+++        } catch (IOException e) {
+++            e.printStackTrace();
++         }
++     }
++ 
++@@ -164,6 +182,7 @@
++         return image;
++     }
++ 
+++    @FXML
++     public void clickFilter(ActionEvent event) throws IOException {
++         FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
++         Parent root = loader.load();
++Index: src/main/java/com/example/demo4/FilterController.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+>package com.example.demo4;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class FilterController {\r\n\r\n    private Stage stage;\r\n\r\n\r\n    public void setStage(Stage stage) {\r\n        this.stage = stage;\r\n    }\r\n\r\n    public void chooseFilter() {\r\n        try {\r\n            //Thêm fxml\r\n            FXMLLoader loader = new FXMLLoader(getClass().getResource(\"hello-view.fxml\"));\r\n            Parent root = loader.load();\r\n            Scene scene = new Scene(root);\r\n\r\n            // Truyền tham chiếu của stage vào MainController\r\n            MainController controller = loader.getController();\r\n            controller.setStage(stage);\r\n\r\n            //thêm css\r\n            scene.getStylesheets().add(getClass().getResource(\"takeAPhoto.css\").toExternalForm());\r\n            scene.getStylesheets().forEach(System.out::println);\r\n\r\n            stage.setTitle(\"Test Frontend\");\r\n            stage.setScene(scene);\r\n            stage.show();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void clickFilter1(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter2(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter3(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n\r\n    public void clickFilter4(ActionEvent event) {\r\n        chooseFilter();\r\n    }\r\n}\r\n\r\n\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/com/example/demo4/FilterController.java b/src/main/java/com/example/demo4/FilterController.java
++--- a/src/main/java/com/example/demo4/FilterController.java	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/java/com/example/demo4/FilterController.java	(date 1716912866874)
++@@ -31,7 +31,7 @@
++ 
++             //thêm css
++             scene.getStylesheets().add(getClass().getResource("takeAPhoto.css").toExternalForm());
++-            scene.getStylesheets().forEach(System.out::println);
+++            //scene.getStylesheets().forEach(System.out::println);
++ 
++             stage.setTitle("Test Frontend");
++             stage.setScene(scene);
++Index: src/main/resources/com/example/demo4/hello-view.fxml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.StackPane?>\r\n\r\n<AnchorPane id=\"root\" prefHeight=\"638.0\" prefWidth=\"744.0\" xmlns=\"http://javafx.com/javafx/21\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.demo4.MainController\">\r\n   <children>\r\n      <Label id=\"person_num\" layoutX=\"399.0\" layoutY=\"14.0\" prefHeight=\"17.0\" prefWidth=\"104.0\" text=\"Person number\" />\r\n      <Button id=\"takeAPhoto\" fx:id=\"takeAPhoto\" layoutX=\"549.0\" layoutY=\"580.0\" mnemonicParsing=\"false\" onAction=\"#clickCapture\" text=\"Take a photo\" />\r\n      <Button id=\"choose\" layoutX=\"112.0\" layoutY=\"580.0\" mnemonicParsing=\"false\" onAction=\"#clickChoose\" text=\"Choose a photo\" />\r\n      <Button id=\"start\" layoutX=\"367.0\" layoutY=\"580.0\" mnemonicParsing=\"false\" />\r\n      <StackPane fx:id=\"imagePane\" layoutX=\"6.0\" layoutY=\"45.0\" prefHeight=\"473.0\" prefWidth=\"738.0\" />\r\n      <Button fx:id=\"filter\" layoutX=\"710.0\" layoutY=\"525.0\" mnemonicParsing=\"false\" onAction=\"#clickFilter\" text=\":\" />\r\n   </children>\r\n</AnchorPane>\r\n
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/resources/com/example/demo4/hello-view.fxml b/src/main/resources/com/example/demo4/hello-view.fxml
++--- a/src/main/resources/com/example/demo4/hello-view.fxml	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/src/main/resources/com/example/demo4/hello-view.fxml	(date 1716973141466)
++@@ -2,16 +2,20 @@
++ 
++ <?import javafx.scene.control.Button?>
++ <?import javafx.scene.control.Label?>
+++<?import javafx.scene.image.ImageView?>
++ <?import javafx.scene.layout.AnchorPane?>
++ <?import javafx.scene.layout.StackPane?>
++ 
++-<AnchorPane id="root" prefHeight="638.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
+++<AnchorPane id="root" prefHeight="683.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
++    <children>
++       <Label id="person_num" layoutX="399.0" layoutY="14.0" prefHeight="17.0" prefWidth="104.0" text="Person number" />
++-      <Button id="takeAPhoto" fx:id="takeAPhoto" layoutX="549.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" />
++-      <Button id="choose" layoutX="112.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickChoose" text="Choose a photo" />
++-      <Button id="start" layoutX="367.0" layoutY="580.0" mnemonicParsing="false" />
++-      <StackPane fx:id="imagePane" layoutX="6.0" layoutY="45.0" prefHeight="473.0" prefWidth="738.0" />
++-      <Button fx:id="filter" layoutX="710.0" layoutY="525.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
+++      <Button id="takeAPhoto" fx:id="takeAPhoto" layoutX="551.0" layoutY="624.0" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" />
+++      <Button id="choose" layoutX="112.0" layoutY="624.0" mnemonicParsing="false" onAction="#clickChoose" text="Choose a photo" />
+++      <Button id="start" fx:id="cameraButton" layoutX="352.0" layoutY="624.0" mnemonicParsing="false" onAction="#startCamera" text="Start" />
+++      <StackPane fx:id="imagePane" layoutX="6.0" layoutY="45.0" prefHeight="474.0" prefWidth="730.0">
+++         <children>
+++            <ImageView fx:id="originalFrame" fitHeight="526.0" fitWidth="716.0" pickOnBounds="true" preserveRatio="true" />
+++         </children></StackPane>
+++      <Button fx:id="filter" layoutX="710.0" layoutY="579.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
++    </children>
++ </AnchorPane>
++Index: .idea/workspace.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"28421e6a-11be-4cf3-ba4a-07d3b3251545\" name=\"Changes\" comment=\"update\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JavaFXApplication\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"ngochuyen2609\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/ngochuyen2609/AppOpenCV_NgocHuyen.git\",\r\n    \"accountId\": \"8b2aba7e-b672-4809-9751-203124427d1b\"\r\n  }\r\n}]]></component>\r\n  <component name=\"MavenImportPreferences\">\r\n    <option name=\"generalSettings\">\r\n      <MavenGeneralSettings>\r\n        <option name=\"mavenHomeTypeForPersistence\" value=\"WRAPPER\" />\r\n      </MavenGeneralSettings>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 4\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2glSfhLi6Yen15qVtlmJIKdKPoC\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.Application.executor\": \"Run\",\r\n    \"Application.HelloApplication.executor\": \"Run\",\r\n    \"Maven.demo4 [clean].executor\": \"Run\",\r\n    \"Maven.demo4 [install].executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/opencv/build/java/x64/opencv_java490.dll\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File\": [\r\n      \"CSS\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\bachkhoahanoi\\Ky4\\OOP\\ThucHanh\\JavaFX\\demo4\\src\\main\\resources\\com\\example\\demo4\" />\r\n    </key>\r\n    <key name=\"MoveInnerDialog.RECENTS_KEY\">\r\n      <recent name=\"\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Application\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.demo4.Application\" />\r\n      <module name=\"demo4\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.demo4.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Application\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"28421e6a-11be-4cf3-ba4a-07d3b3251545\" name=\"Changes\" comment=\"\" />\r\n      <created>1716270777718</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1716270777718</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"update\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1716892141065</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1716892141065</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"update\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"update\" />\r\n  </component>\r\n</project>
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/.idea/workspace.xml b/.idea/workspace.xml
++--- a/.idea/workspace.xml	(revision a6c5ab9d6653417c068e8e2ae363df0e9b27dcbc)
+++++ b/.idea/workspace.xml	(date 1716974920924)
++@@ -6,6 +6,16 @@
++   <component name="ChangeListManager">
++     <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="update">
++       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/selected/output.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/output.jpg" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/selected/selected_image.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/selected_image.jpg" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Application.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomablePane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomableImageView.java" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/hello-view.fxml" afterDir="false" />
+++      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" afterDir="false" />
++     </list>
++     <option name="SHOW_DIALOG" value="false" />
++     <option name="HIGHLIGHT_CONFLICTS" value="true" />
++@@ -23,18 +33,18 @@
++   <component name="Git.Settings">
++     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++   </component>
++-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++-  "lastFilter": {
++-    "state": "OPEN",
++-    "assignee": "ngochuyen2609"
+++  <component name="GitHubPullRequestSearchHistory">{
+++  &quot;lastFilter&quot;: {
+++    &quot;state&quot;: &quot;OPEN&quot;,
+++    &quot;assignee&quot;: &quot;ngochuyen2609&quot;
++   }
++-}]]></component>
++-  <component name="GithubPullRequestsUISettings"><![CDATA[{
++-  "selectedUrlAndAccountId": {
++-    "url": "https://github.com/ngochuyen2609/AppOpenCV_NgocHuyen.git",
++-    "accountId": "8b2aba7e-b672-4809-9751-203124427d1b"
+++}</component>
+++  <component name="GithubPullRequestsUISettings">{
+++  &quot;selectedUrlAndAccountId&quot;: {
+++    &quot;url&quot;: &quot;https://github.com/ngochuyen2609/AppOpenCV_NgocHuyen.git&quot;,
+++    &quot;accountId&quot;: &quot;8b2aba7e-b672-4809-9751-203124427d1b&quot;
++   }
++-}]]></component>
+++}</component>
++   <component name="MavenImportPreferences">
++     <option name="generalSettings">
++       <MavenGeneralSettings>
++@@ -51,27 +61,27 @@
++     <option name="hideEmptyMiddlePackages" value="true" />
++     <option name="showLibraryContents" value="true" />
++   </component>
++-  <component name="PropertiesComponent"><![CDATA[{
++-  "keyToString": {
++-    "Application.Application.executor": "Run",
++-    "Application.HelloApplication.executor": "Run",
++-    "Maven.demo4 [clean].executor": "Run",
++-    "Maven.demo4 [install].executor": "Run",
++-    "RunOnceActivity.ShowReadmeOnStart": "true",
++-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++-    "git-widget-placeholder": "main",
++-    "kotlin-language-version-configured": "true",
++-    "last_opened_file_path": "C:/opencv/build/java/x64/opencv_java490.dll",
++-    "project.structure.last.edited": "Modules",
++-    "project.structure.proportion": "0.15",
++-    "project.structure.side.proportion": "0.2"
+++  <component name="PropertiesComponent">{
+++  &quot;keyToString&quot;: {
+++    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
+++    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+++    &quot;Maven.demo4 [clean].executor&quot;: &quot;Run&quot;,
+++    &quot;Maven.demo4 [install].executor&quot;: &quot;Run&quot;,
+++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+++    &quot;last_opened_file_path&quot;: &quot;C:/opencv/build/java/x64/opencv_java490.dll&quot;,
+++    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
++   },
++-  "keyToStringList": {
++-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
++-      "CSS"
+++  &quot;keyToStringList&quot;: {
+++    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+++      &quot;CSS&quot;
++     ]
++   }
++-}]]></component>
+++}</component>
++   <component name="RecentsManager">
++     <key name="CopyFile.RECENT_KEYS">
++       <recent name="C:\bachkhoahanoi\Ky4\OOP\ThucHanh\JavaFX\demo4\src\main\resources\com\example\demo4" />
++@@ -117,8 +127,27 @@
++       <option name="project" value="LOCAL" />
++       <updated>1716892141065</updated>
++     </task>
++-    <option name="localTasksCounter" value="2" />
+++    <task id="LOCAL-00002" summary="update">
+++      <option name="closed" value="true" />
+++      <created>1716892611027</created>
+++      <option name="number" value="00002" />
+++      <option name="presentableId" value="LOCAL-00002" />
+++      <option name="project" value="LOCAL" />
+++      <updated>1716892611027</updated>
+++    </task>
+++    <option name="localTasksCounter" value="3" />
++     <servers />
+++  </component>
+++  <component name="Vcs.Log.Tabs.Properties">
+++    <option name="TAB_STATES">
+++      <map>
+++        <entry key="MAIN">
+++          <value>
+++            <State />
+++          </value>
+++        </entry>
+++      </map>
+++    </option>
++   </component>
++   <component name="VcsManagerConfiguration">
++     <MESSAGE value="update" />
+Index: src/main/java/com/example/demo4/Utils.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/demo4/Utils.java b/src/main/java/com/example/demo4/Utils.java
+new file mode 100644
+--- /dev/null	(date 1716950857489)
++++ b/src/main/java/com/example/demo4/Utils.java	(date 1716950857489)
+@@ -0,0 +1,51 @@
++package com.example.demo4;
++
++
++import java.awt.image.BufferedImage;
++import java.awt.image.DataBufferByte;
++import javafx.application.Platform;
++import javafx.beans.property.ObjectProperty;
++import javafx.scene.image.Image;
++import org.opencv.core.Mat;
++import javafx.embed.swing.SwingFXUtils;
++public class Utils {
++    public static Image mat2Image(Mat frame)
++    {
++        try
++        {
++            return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
++        }
++        catch (Exception e)
++        {
++            System.err.println("Cannot convert the Mat object: " + e);
++            return null;
++        }
++    }
++    public static <T> void onFXThread(final ObjectProperty<T> property, final T value)
++    {
++        Platform.runLater(() -> {
++            property.set(value);
++        });
++    }
++    private static BufferedImage matToBufferedImage(Mat original)
++    {
++        // init
++        BufferedImage image = null;
++        int width = original.width(), height = original.height(), channels = original.channels();
++        byte[] sourcePixels = new byte[width * height * channels];
++        original.get(0, 0, sourcePixels);
++
++        if (original.channels() > 1)
++        {
++            image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
++        }
++        else
++        {
++            image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
++        }
++        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
++        System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
++
++        return image;
++    }
++}
+\ No newline at end of file
+Index: src/main/java/com/example/demo4/FaceDetectionController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/demo4/FaceDetectionController.java b/src/main/java/com/example/demo4/FaceDetectionController.java
+new file mode 100644
+--- /dev/null	(date 1716975142834)
++++ b/src/main/java/com/example/demo4/FaceDetectionController.java	(date 1716975142834)
+@@ -0,0 +1,170 @@
++package com.example.demo4;
++import java.util.concurrent.Executors;
++import java.util.concurrent.ScheduledExecutorService;
++import java.util.concurrent.TimeUnit;
++
++import org.opencv.core.Mat;
++import org.opencv.core.MatOfRect;
++import org.opencv.core.Rect;
++import org.opencv.core.Scalar;
++import org.opencv.core.Size;
++import org.opencv.imgproc.Imgproc;
++import org.opencv.objdetect.CascadeClassifier;
++import org.opencv.objdetect.Objdetect;
++import org.opencv.videoio.VideoCapture;
++
++import javafx.event.Event;
++import javafx.fxml.FXML;
++import javafx.scene.control.Button;
++import javafx.scene.control.CheckBox;
++import javafx.scene.image.Image;
++import javafx.scene.image.ImageView;
++
++public class FaceDetectionController extends Utils{
++    @FXML
++    private Button cameraButton;
++    @FXML
++    private ImageView originalFrame;
++    private ScheduledExecutorService timer;
++    private VideoCapture capture = new VideoCapture();
++    private boolean cameraActive;
++    private CascadeClassifier faceCascade;
++
++    {
++        faceCascade = new CascadeClassifier();
++    }
++
++    private int absoluteFaceSize = 0;
++
++    @FXML
++    protected void startCamera()
++    {
++        originalFrame.setPreserveRatio(true);
++        if (!this.cameraActive)
++        {
++
++            this.capture.open(0);
++
++            if (this.capture.isOpened())
++            {
++                this.cameraActive = true;
++
++                // 30fps
++                Runnable frameGrabber = new Runnable() {
++
++                    @Override
++                    public void run()
++                    {
++                        Mat frame = grabFrame();
++                        Image imageToShow = Utils.mat2Image(frame);
++                        updateImageView(originalFrame, imageToShow);
++                    }
++                };
++
++                this.timer = Executors.newSingleThreadScheduledExecutor();
++                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
++
++                // update the button content
++                this.cameraButton.setText("Stop");
++            }
++            else
++            {
++                // log the error
++                System.err.println("Failed to open the camera connection...");
++            }
++        }
++        else
++        {
++            this.cameraActive = false;
++            this.cameraButton.setText("Start");
++
++            this.stopAcquisition();
++            updateImageView(originalFrame, null);
++
++        }
++    }
++    private Mat grabFrame()
++    {
++        Mat frame = new Mat();
++
++        if (this.capture.isOpened())
++        {
++            try
++            {
++                this.capture.read(frame);
++
++                if (!frame.empty())
++                {
++                    this.detectAndDisplay(frame);
++                }
++
++            }
++            catch (Exception e)
++            {
++                System.err.println("Exception during the image elaboration: " + e);
++            }
++        }
++
++        return frame;
++    }
++
++    void detectAndDisplay(Mat frame)
++    {
++        MatOfRect faces = new MatOfRect();
++        Mat grayFrame = new Mat();
++
++        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
++        Imgproc.equalizeHist(grayFrame, grayFrame);
++
++        if (this.absoluteFaceSize == 0)
++        {
++            int height = grayFrame.rows();
++            if (Math.round(height * 0.2f) > 0)
++            {
++                this.absoluteFaceSize = Math.round(height * 0.2f);
++            }
++        }
++
++        // detect faces
++        this.faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
++                new Size(this.absoluteFaceSize, this.absoluteFaceSize), new Size());
++
++        Rect[] facesArray = faces.toArray();
++        for (int i = 0; i < facesArray.length; i++)
++            Imgproc.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0), 3);
++
++    }
++
++
++    void stopAcquisition()
++    {
++        if (this.timer!=null && !this.timer.isShutdown())
++        {
++            try
++            {
++                // stop the timer
++                this.timer.shutdown();
++                this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
++            }
++            catch (InterruptedException e)
++            {
++                // log any exception
++                System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
++            }
++        }
++
++        if (this.capture.isOpened())
++        {
++            // release the camera
++            this.capture.release();
++        }
++    }
++    void updateImageView(ImageView view, Image image)
++    {
++        Utils.onFXThread(view.imageProperty(), image);
++    }
++    protected void setClosed()
++    {
++        this.stopAcquisition();
++    }
++}
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"28421e6a-11be-4cf3-ba4a-07d3b3251545\" name=\"Changes\" comment=\"update\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/selected/output.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/selected/output.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/selected/selected_image.jpg\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/selected/selected_image.jpg\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomablePane.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomableImageView.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JavaFXApplication\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;ngochuyen2609&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/ngochuyen2609/AppOpenCV_NgocHuyen.git&quot;,\r\n    &quot;accountId&quot;: &quot;8b2aba7e-b672-4809-9751-203124427d1b&quot;\r\n  }\r\n}</component>\r\n  <component name=\"MavenImportPreferences\">\r\n    <option name=\"generalSettings\">\r\n      <MavenGeneralSettings>\r\n        <option name=\"mavenHomeTypeForPersistence\" value=\"WRAPPER\" />\r\n      </MavenGeneralSettings>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 4\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2glSfhLi6Yen15qVtlmJIKdKPoC\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.Application.executor\": \"Run\",\r\n    \"Application.HelloApplication.executor\": \"Run\",\r\n    \"Maven.demo4 [clean].executor\": \"Run\",\r\n    \"Maven.demo4 [install].executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/ADMIN/Downloads/Demo4_copy\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File\": [\r\n      \"CSS\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\bachkhoahanoi\\Ky4\\OOP\\ThucHanh\\JavaFX\\demo4\\src\\main\\resources\\com\\example\\demo4\" />\r\n    </key>\r\n    <key name=\"MoveInnerDialog.RECENTS_KEY\">\r\n      <recent name=\"\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Application\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.demo4.Application\" />\r\n      <module name=\"demo4\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.demo4.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Application\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"28421e6a-11be-4cf3-ba4a-07d3b3251545\" name=\"Changes\" comment=\"\" />\r\n      <created>1716270777718</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1716270777718</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"update\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1716892141065</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1716892141065</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"update\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"update\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 33869dc7aab0917a46b8dd37e8df0c60cf22372b)
++++ b/.idea/workspace.xml	(date 1716982298888)
+@@ -4,16 +4,13 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="update">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/selected/output.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/output.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/selected/selected_image.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/selected_image.jpg" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomablePane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomableImageView.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" afterDir="false" />
++    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="Huyen update 29/05/2024">
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/output.jpg" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/selected_image.jpg" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH_[Changes]/shelved.patch" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2024_4_47_CH__Changes_.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FaceDetectionController.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Utils.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -125,11 +122,20 @@
+       <option name="project" value="LOCAL" />
+       <updated>1716892141065</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Huyen update 29/05/2024">
++      <option name="closed" value="true" />
++      <created>1716982121440</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1716982121440</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="update" />
+-    <option name="LAST_COMMIT_MESSAGE" value="update" />
++    <MESSAGE value="Huyen update 29/05/2024" />
++    <option name="LAST_COMMIT_MESSAGE" value="Huyen update 29/05/2024" />
+   </component>
+ </project>
+\ No newline at end of file
