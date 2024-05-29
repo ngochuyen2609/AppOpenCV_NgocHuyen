@@ -1,5 +1,6 @@
 package com.example.demo4;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -216,6 +218,9 @@ public class MainController extends Utils {
                             ImageIO.write(bImage, "png", file); // Mặc định lưu file dạng png
                         }
                         System.out.println("Image saved to: " + file.getAbsolutePath());
+
+                        // Tạo hiệu ứng flash
+                        createFlashEffect();
                     } catch (IOException e) {
                         e.printStackTrace();
                         showAlert("Error", "Failed to save image: " + e.getMessage());
@@ -230,6 +235,19 @@ public class MainController extends Utils {
         });
     }
 
+    private void createFlashEffect() {
+        // Tạo một Rectangle màu trắng trên StackPane để tạo hiệu ứng flash
+        javafx.scene.shape.Rectangle flash = new javafx.scene.shape.Rectangle(stackPane.getWidth(), stackPane.getHeight(), javafx.scene.paint.Color.WHITE);
+        stackPane.getChildren().add(flash);
+
+        // Tạo hiệu ứng mờ dần cho flash
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), flash);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setOnFinished(e -> stackPane.getChildren().remove(flash));
+        fadeTransition.play();
+    }
+
     // Hiển thị thông báo lỗi khi chưa có ảnh chụp
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -237,6 +255,25 @@ public class MainController extends Utils {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    // Đảm bảo cập nhật kích thước của hiệu ứng flash khi kích thước cửa sổ thay đổi
+    @FXML
+    public void initialize() {
+        stackPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (stackPane.getChildren().size() > 1) {
+                javafx.scene.shape.Rectangle flash = (javafx.scene.shape.Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+                flash.setWidth(newVal.doubleValue());
+            }
+        });
+
+        stackPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (stackPane.getChildren().size() > 1) {
+                javafx.scene.shape.Rectangle flash = (javafx.scene.shape.Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+                flash.setHeight(newVal.doubleValue());
+            }
+        });
     }
 
 
