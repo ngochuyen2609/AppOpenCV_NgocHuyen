@@ -55,7 +55,8 @@ public class MainController extends Utils {
     private StackPane stackPane;
     @FXML
     private Label lblnumber ;
-    String source = "C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
+
+    String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
     CascadeClassifier faceDetector = new CascadeClassifier(source);
 
     private boolean isCameraActive = false;
