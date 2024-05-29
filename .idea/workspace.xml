@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update" />
+    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update 29/05 10:23" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -115,13 +115,22 @@
       <option name="project" value="LOCAL" />
       <updated>1716983108360</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="huyen update 29/05 10:23">
+      <option name="closed" value="true" />
+      <created>1716996221351</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1716996221351</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Huyen update 29/05/2024" />
     <MESSAGE value="update&#10;&#10; Conflicts:&#10;&#9;.idea/workspace.xml" />
     <MESSAGE value="huyen update" />
-    <option name="LAST_COMMIT_MESSAGE" value="huyen update" />
+    <MESSAGE value="huyen update 29/05 10:23" />
+    <option name="LAST_COMMIT_MESSAGE" value="huyen update 29/05 10:23" />
   </component>
 </project>
