@@ -3,7 +3,6 @@ package com.example.demo4;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.StackPane;
 
 public class ZoomableImageView extends ImageView {
     private double scale = 1.0;
@@ -11,7 +10,6 @@ public class ZoomableImageView extends ImageView {
     private double offsetY = 0;
     private double initialX = 0;
     private double initialY = 0;
-
 
     public ZoomableImageView() {
         setPreserveRatio(true);
@@ -33,8 +31,8 @@ public class ZoomableImageView extends ImageView {
 
         double scaleChange = scale / oldScale;
 
-        offsetX = (offsetX - mouseX) * scaleChange + mouseX;
-        offsetY = (offsetY - mouseY) * scaleChange + mouseY;
+        offsetX = mouseX - (mouseX - offsetX) * scaleChange;
+        offsetY = mouseY - (mouseY - offsetY) * scaleChange;
 
         updateImageView();
     }
@@ -68,21 +66,4 @@ public class ZoomableImageView extends ImageView {
         this.setTranslateX(offsetX);
         this.setTranslateY(offsetY);
     }
-
-//    public void zoomToFit() {
-//        double paneWidth = getWidth();
-//        double paneHeight = getHeight();
-//        double imgWidth = imageView.getImage().getWidth();
-//        double imgHeight = imageView.getImage().getHeight();
-//
-//        double scaleX = paneWidth / imgWidth;
-//        double scaleY = paneHeight / imgHeight;
-//
-//        scale = Math.min(scaleX, scaleY);
-//
-//        offsetX = 0;
-//        offsetY = 0;
-//
-//        updateImageView();
-//    }
 }

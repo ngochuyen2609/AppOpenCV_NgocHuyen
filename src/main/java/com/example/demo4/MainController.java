@@ -28,6 +28,7 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
 
 import java.awt.*;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
@@ -55,9 +56,10 @@ public class MainController extends Utils {
     private StackPane stackPane;
     @FXML
     private Label lblnumber ;
-
+    //String source = "C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
     String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
     CascadeClassifier faceDetector = new CascadeClassifier(source);
+//    CascadeClassifier faceDetector = new CascadeClassifier(source);
 
     private boolean isCameraActive = false;
     private VideoCapture cameraCapture;
@@ -74,7 +76,7 @@ public class MainController extends Utils {
     }
 
     private void startCamera() {
-         cameraCapture = new VideoCapture(0);
+        cameraCapture = new VideoCapture(0);
         MatOfRect rostros = new MatOfRect();
         Mat frame = new Mat();
         Mat frame_gray = new Mat();
@@ -185,9 +187,59 @@ public class MainController extends Utils {
         Optional<String> result = dialog.showAndWait();
 
         result.ifPresent(name1 -> {
-            System.out.println("File name :" + name.getText());
+            System.out.println("File name: " + name.getText());
+
+            // Lấy hình ảnh hiện tại từ originalFrame
+            Image image = originalFrame.getImage();
+            if (image != null) {
+                // Mở hộp thoại để chọn nơi lưu ảnh
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Image");
+                fileChooser.setInitialFileName(name.getText() + ".png");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("PNG Files", "*.png"),
+                        new FileChooser.ExtensionFilter("JPG Files", "*.jpg"),
+                        new FileChooser.ExtensionFilter("All Files", "*.*"));
+
+                File file = fileChooser.showSaveDialog(stage);
+
+                if (file != null) {
+                    try {
+                        // Lưu ảnh vào file
+                        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                        String fileName = file.getName().toLowerCase();
+                        if (fileName.endsWith(".png")) {
+                            ImageIO.write(bImage, "png", file);
+                        } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+                            ImageIO.write(bImage, "jpg", file);
+                        } else {
+                            ImageIO.write(bImage, "png", file); // Mặc định lưu file dạng png
+                        }
+                        System.out.println("Image saved to: " + file.getAbsolutePath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showAlert("Error", "Failed to save image: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("File save dialog was cancelled.");
+                }
+            } else {
+                System.out.println("No image available to save.");
+                showAlert("No Image", "No image available to save.");
+            }
         });
     }
+
+    // Hiển thị thông báo lỗi khi chưa có ảnh chụp
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
     @FXML
     public void clickChoose(ActionEvent event) {
         chooseImage();
@@ -282,21 +334,21 @@ public class MainController extends Utils {
     @FXML
     public void clickFilter(ActionEvent event) throws IOException {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
-            Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
+        Parent root = loader.load();
 
-            //add controller
-            FilterController controller = loader.getController();
-            //set thêm ảnh
+        //add controller
+        FilterController controller = loader.getController();
+        //set thêm ảnh
 
-            Scene newScene = new Scene(root);
-            stage.setScene(newScene);
-            stage.setTitle("Select Filter");
-            //thêm css mới cho scene này
-            newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
+        Scene newScene = new Scene(root);
+        stage.setScene(newScene);
+        stage.setTitle("Select Filter");
+        //thêm css mới cho scene này
+        newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
 
-            //controller.setImage(lastImage);
-            controller.setStage(stage);
-            stage.show();;
+        //controller.setImage(lastImage);
+        controller.setStage(stage);
+        stage.show();;
     }
 }
