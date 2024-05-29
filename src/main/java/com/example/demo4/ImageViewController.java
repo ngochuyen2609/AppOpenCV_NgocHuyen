@@ -56,10 +56,10 @@ public class ImageViewController {
         image.getStyleClass().add("image");
         lastImage = a; // Cập nhật ảnh gần nhất
     }
-//
-//    public void setLastImage(Image a){
-//        lastImage = a;
-//    }
+
+    public void setLastImage(Image a){
+        lastImage = a;
+    }
 
     public  Image getLatestImage() {
         return lastImage; // Trả về ảnh gần nhất
@@ -86,7 +86,7 @@ public class ImageViewController {
             e.printStackTrace();
         }
     }
-
+    @FXML
     public void clickChoose(ActionEvent event) {
         chooseImage();
     }

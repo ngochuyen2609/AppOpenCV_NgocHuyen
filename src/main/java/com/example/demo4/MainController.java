@@ -27,7 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class MainController {
+public class MainController extends FaceDetectionController {
     @FXML
     private Image image;
     private Stage stage;
@@ -80,11 +80,11 @@ public class MainController {
             System.out.println("File name :" + name.getText());
         });
     }
-
+    @FXML
     public void clickChoose(ActionEvent event) {
         chooseImage();
     }
-
+    // Sự kiện chọn ảnh
     private void chooseImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -118,7 +118,7 @@ public class MainController {
                 return;
             }
 
-            CascadeClassifier faceDetector = new CascadeClassifier("C:\\opencv\\build\\etc\\lbpcascades\\lbpcascade_frontalface_improved.xml");
+            CascadeClassifier faceDetector = new CascadeClassifier("src/main/resources/com/example/demo4/lbpcascades/lbpcascade_frontalface_improved.xml");
 
             if (faceDetector.empty()) {
                 System.out.println("Không thể tải bộ phân loại");
@@ -138,15 +138,23 @@ public class MainController {
             BufferedImage bufferedImage = matToBufferedImage(src);
             WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
 
+
+
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
                 Parent root = loader.load();
 
                 ImageViewController controller = loader.getController();
-                controller.setImage(resultImage);
                 controller.setStage(stage);
                 Scene newScene = new Scene(root);
+                controller.setLastImage(resultImage);
+                ZoomableImageView zoomableImageView = new ZoomableImageView();
+                zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
+                zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
+                zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
+                zoomableImageView.setPreserveRatio(true);
 
+                controller.getImage_layout().getChildren().add(zoomableImageView);
                 newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
                 stage.setScene(newScene);
                 stage.setTitle("Selected Image");
