@@ -20,7 +20,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class FaceDetectionController extends Utils {
+public class FaceDetectionController {
     @FXML
     private Button cameraButton;
     @FXML
