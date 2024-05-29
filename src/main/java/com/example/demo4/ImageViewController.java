@@ -6,16 +6,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,23 +31,35 @@ public class ImageViewController {
 
     @FXML
     private ImageView image;
+    @FXML
+    private StackPane image_layout;
+    private static Image lastImage;
+
     private Stage stage;
-    private Image lastImage;
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    public StackPane getImage_layout() {
+        return image_layout;
+    }
+
 
     public ImageView getImage() {
         return image;
     }
 
 
-    public void setImage(Image a) {
+    public void setlImage(Image a) {
         image.setImage(a);
         image.getStyleClass().add("image");
-        this.lastImage = a; // Cập nhật ảnh gần nhất
+        lastImage = a; // Cập nhật ảnh gần nhất
     }
+//
+//    public void setLastImage(Image a){
+//        lastImage = a;
+//    }
 
     public  Image getLatestImage() {
         return lastImage; // Trả về ảnh gần nhất
@@ -128,15 +145,24 @@ public class ImageViewController {
             BufferedImage bufferedImage = matToBufferedImage(src);
             WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
 
+            lastImage=resultImage;
+
+
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
                 Parent root = loader.load();
 
                 ImageViewController controller = loader.getController();
-                controller.setImage(resultImage);
                 controller.setStage(stage);
                 Scene newScene = new Scene(root);
 
+                ZoomableImageView zoomableImageView = new ZoomableImageView();
+                zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
+                zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
+                zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
+                zoomableImageView.setPreserveRatio(true);
+
+                controller.getImage_layout().getChildren().add(zoomableImageView);
                 newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
                 stage.setScene(newScene);
                 stage.setTitle("Selected Image");
@@ -155,47 +181,55 @@ public class ImageViewController {
     }
 
 
-    private void showImageInCurrentStage(File file) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
-        Parent root = loader.load();
+//    private void showImageInCurrentStage(File file) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
+//        Parent root = loader.load();
+//
+//        //add controller
+//        ImageViewController controller = loader.getController();
+//        Image image_new = new Image(file.toURI().toString());
+//
+//
+//        controller.setImage(image_new);
+//
+//        Scene newScene = new Scene(root);
+//
+//        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
+//        stage.setTitle("Selected Image");
+//
+//        controller.setStage(stage);
+//
+//        //thêm css mới cho scene này
+//        newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
+//    }
 
-        //add controller
-        ImageViewController controller = loader.getController();
-        Image image_new = new Image(file.toURI().toString());
-
-
-        controller.setImage(image_new);
-
-        Scene newScene = new Scene(root);
-
-        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
-        stage.setTitle("Selected Image");
-
-        controller.setStage(stage);
-
-        //thêm css mới cho scene này
-        newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
-    }
-
-
+    @FXML
     public void clickFilter (ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filterImage-view.fxml"));
-        Parent root = loader.load();
 
-        //add controller
-        FilterImageController controller = loader.getController();
-        //set thêm ảnh
+        if( lastImage == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("You don't choose Image");
+            alert.showAndWait();
+        }
+        else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("filterImage-view.fxml"));
+            Parent root = loader.load();
 
-        Scene newScene = new Scene(root);
-        stage.setScene(newScene);
-        stage.setTitle("Select Filter");
+            //add controller
+            FilterImageController controller = loader.getController();
+            //set thêm ảnh
 
-        controller.setImage(lastImage);
-        controller.setStage(stage);
+            Scene newScene = new Scene(root);
+            stage.setScene(newScene);
+            stage.setTitle("Select Filter");
+            //thêm css mới cho scene này
+            newScene.getStylesheets().add(getClass().getResource("filterImage.css").toExternalForm());
 
-
-        //thêm css mới cho scene này
-        newScene.getStylesheets().add(getClass().getResource("filterImage.css").toExternalForm());
+            controller.setImage(lastImage);
+            controller.setStage(stage);
+            stage.show();;
+        }
     }
 
 }

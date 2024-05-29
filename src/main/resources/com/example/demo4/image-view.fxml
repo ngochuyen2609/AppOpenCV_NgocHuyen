@@ -10,11 +10,11 @@
       <Button fx:id="detection" layoutX="278.0" layoutY="524.0" text="Detection" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="278.0" />
       <Button fx:id="choose" layoutX="80.0" layoutY="524.0" onAction="#clickChoose" text="Choose image" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="80.0" />
       <Button fx:id="back" layoutX="463.0" layoutY="524.0" onAction="#backScene" text="Back" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="463.0" />
+      <Button fx:id="filter" layoutX="566.0" layoutY="483.0" onAction="#clickFilter" text=":" AnchorPane.bottomAnchor="77.39999999999998" AnchorPane.rightAnchor="14.799999999999955" />
       <StackPane fx:id="image_layout" layoutX="11.2" prefHeight="472.0" prefWidth="579.0" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
             <ImageView fx:id="image" fitHeight="477.0" fitWidth="572.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
-      <Button fx:id="filter" layoutX="566.0" layoutY="483.0" onAction="#clickFilter" text=":" AnchorPane.bottomAnchor="77.39999999999998" AnchorPane.rightAnchor="14.799999999999955" />
    </children>
 </AnchorPane>

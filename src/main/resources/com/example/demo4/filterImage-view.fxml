@@ -19,25 +19,25 @@
     <children>
         <Pane GridPane.columnIndex="0" GridPane.rowIndex="0">
             <children>
-                <ImageView fx:id="filter1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="filter1" fitHeight="253.0" fitWidth="297.0" pickOnBounds="true" preserveRatio="true" />
                 <Button fx:id="button_filter1" layoutX="124.0" layoutY="188.0" mnemonicParsing="false" onAction="#clickFilter1" text="Filter 1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             </children>
         </Pane>
         <Pane GridPane.columnIndex="1" GridPane.rowIndex="0">
             <children>
-                <ImageView fx:id="filter2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="filter2" fitHeight="253.0" fitWidth="297.0" pickOnBounds="true" preserveRatio="true" />
                 <Button fx:id="button_filter2" layoutX="124.0" layoutY="187.0" mnemonicParsing="false" onAction="#clickFilter2" text="Filter 2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             </children>
         </Pane>
         <Pane GridPane.columnIndex="0" GridPane.rowIndex="1">
             <children>
-                <ImageView fx:id="filter3" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="filter3" fitHeight="253.0" fitWidth="297.0" pickOnBounds="true" preserveRatio="true" />
                 <Button fx:id="button_filter3" layoutX="124.0" layoutY="188.0" mnemonicParsing="false" onAction="#clickFilter3" text="Filter 3" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             </children>
         </Pane>
         <Pane GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
-                <ImageView fx:id="filter4" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="filter4" fitHeight="253.0" fitWidth="297.0" pickOnBounds="true" preserveRatio="true" />
                 <Button fx:id="button_filter4" layoutX="124.0" layoutY="187.0" mnemonicParsing="false" onAction="#clickFilter4" text="Filter 4" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </Pane>
