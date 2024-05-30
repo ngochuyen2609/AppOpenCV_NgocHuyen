@@ -2,6 +2,7 @@ package com.example.demo4;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +32,6 @@ public class FilterController {
 
             //thêm css
             scene.getStylesheets().add(getClass().getResource("takeAPhoto.css").toExternalForm());
-            scene.getStylesheets().forEach(System.out::println);
 
             stage.setTitle("Test Frontend");
             stage.setScene(scene);
@@ -40,19 +40,19 @@ public class FilterController {
             e.printStackTrace();
         }
     }
-
+    @FXML
     public void clickFilter1(ActionEvent event) {
         chooseFilter();
     }
-
+    @FXML
     public void clickFilter2(ActionEvent event) {
         chooseFilter();
     }
-
+    @FXML
     public void clickFilter3(ActionEvent event) {
         chooseFilter();
     }
-
+    @FXML
     public void clickFilter4(ActionEvent event) {
         chooseFilter();
     }

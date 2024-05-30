@@ -384,24 +384,25 @@ public class MainController {
     }
     @FXML
     public void clickFilter(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
+            Parent root = loader.load();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
-        Parent root = loader.load();
+            // Kiểm tra để đảm bảo rằng controller đúng
+            FilterController controller = loader.getController();
 
-        //add controller
-        FilterController controller = loader.getController();
-        //set thêm ảnh
+            Scene newScene = new Scene(root);
+            stage.setScene(newScene);
+            stage.setTitle("Select Filter");
+            newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
 
-        Scene newScene = new Scene(root);
-        stage.setScene(newScene);
-        stage.setTitle("Select Filter");
-        //thêm css mới cho scene này
-        newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
-
-        //controller.setImage(lastImage);
-        controller.setStage(stage);
-        stage.show();;
+            controller.setStage(stage);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
     public void releaseResources() {
         // Thực hiện giải phóng các tài nguyên OpenCV hoặc các tài nguyên khác tại đây
         System.out.println("Releasing resources...");
