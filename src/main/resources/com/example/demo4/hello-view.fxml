@@ -5,7 +5,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane id="root" prefHeight="651.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
@@ -17,10 +16,8 @@
       <StackPane fx:id="stackPane" layoutX="6.0" layoutY="45.0" prefHeight="474.0" prefWidth="626.0">
          <children>
             <ImageView fx:id="originalFrame" fitHeight="462.0" fitWidth="606.0" pickOnBounds="true" preserveRatio="true" />
-            <!-- Thêm một nhóm để chứa hiệu ứng flash -->
-            <Group>
-               <Rectangle fx:id="flashEffect" fill="#ffffff" opacity="0" />
-            </Group>
+            <!-- Thêm Rectangle trực tiếp vào StackPane -->
+            <Rectangle fx:id="flashEffect" fill="#ffffff" opacity="0" />
          </children>
       </StackPane>
       <Button fx:id="filter" layoutX="604.0" layoutY="529.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />

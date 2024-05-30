@@ -16,7 +16,7 @@
          <content>
             <StackPane fx:id="image_layout" layoutX="11.2" prefHeight="472.0" prefWidth="579.0" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <ImageView fx:id="image" fitHeight="479.0" fitWidth="593.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="image" fitHeight="472.0" fitWidth="579.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </StackPane>
          </content>

@@ -76,7 +76,6 @@ public class MainController {
             lblnumber.setText("Person Number");
         }
     }
-    Mat frame;
     private void startCamera() {
         cameraCapture = new VideoCapture(0);
         MatOfRect rostros = new MatOfRect();
@@ -93,7 +92,6 @@ public class MainController {
                     break;
                 } else {
                     try {
-                        this.frame = frame;
                         Imgproc.cvtColor(frame, frame_gray, Imgproc.COLOR_BGR2GRAY);
                         Imgproc.equalizeHist(frame_gray, frame_gray);
                         double w = frame.width();
