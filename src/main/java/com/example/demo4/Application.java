@@ -9,6 +9,7 @@ import org.opencv.core.Core;
 import java.io.IOException;
 
 public class Application extends javafx.application.Application {
+    private MainController controller;
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -18,7 +19,7 @@ public class Application extends javafx.application.Application {
             Scene scene = new Scene(root);
 
             // Truyền tham chiếu của stage vào MainController
-            MainController controller = loader.getController();
+            controller = loader.getController();
             controller.setStage(stage);
 
             //thêm css
@@ -31,6 +32,14 @@ public class Application extends javafx.application.Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void stop() {
+        // Giải phóng tài nguyên tại đây
+        if (controller != null) {
+            controller.releaseResources();
+        }
+        System.out.println("Application is closing...");
     }
 
     public static void main(String[] args) {

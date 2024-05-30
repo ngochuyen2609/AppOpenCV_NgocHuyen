@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
-public class MainController extends Utils {
+public class MainController {
 
     private Stage stage;
     @FXML
@@ -76,7 +76,7 @@ public class MainController extends Utils {
             lblnumber.setText("Person Number");
         }
     }
-
+    Mat frame;
     private void startCamera() {
         cameraCapture = new VideoCapture(0);
         MatOfRect rostros = new MatOfRect();
@@ -93,6 +93,7 @@ public class MainController extends Utils {
                     break;
                 } else {
                     try {
+                        this.frame = frame;
                         Imgproc.cvtColor(frame, frame_gray, Imgproc.COLOR_BGR2GRAY);
                         Imgproc.equalizeHist(frame_gray, frame_gray);
                         double w = frame.width();
@@ -159,80 +160,95 @@ public class MainController extends Utils {
 
     @FXML
     public void clickCapture(ActionEvent event) {
+        // Chụp ảnh ngay khi nhấn nút
+        Image capturedImage = captureImage();
+        // Tạo hiệu ứng flash (nếu cần thiết)
+        createFlashEffect();
+
+        if (capturedImage == null) {
+            showAlert("No Image", "Failed to capture image.");
+            return;
+        }
+
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Choose a photo");
-        dialog.setHeaderText("Choose a photo from library");
+        dialog.setTitle("Save Captured Image");
+        dialog.setHeaderText("Enter a name for the captured image:");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        TextField name = new TextField();
-        name.setPromptText("Name Picture");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Image Name");
 
         grid.add(new Label("Name: "), 0, 0);
-        grid.add(name, 1, 0);
+        grid.add(nameField, 1, 0);
 
         dialog.getDialogPane().setContent(grid);
 
-        ButtonType buttonYes = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(buttonYes, ButtonType.CANCEL);
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(submitButton, ButtonType.CANCEL);
 
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == buttonYes) {
-                return name.getText();
+            if (dialogButton == submitButton) {
+                return nameField.getText();
             }
             return null;
         });
 
         Optional<String> result = dialog.showAndWait();
 
-        result.ifPresent(name1 -> {
-            System.out.println("File name: " + name.getText());
+        result.ifPresent(name -> {
+            if (name.trim().isEmpty()) {
+                showAlert("Invalid Name", "Image name cannot be empty.");
+                return;
+            }
 
-            // Lấy hình ảnh hiện tại từ originalFrame
-            Image image = originalFrame.getImage();
-            if (image != null) {
-                // Mở hộp thoại để chọn nơi lưu ảnh
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save Image");
-                fileChooser.setInitialFileName(name.getText() + ".png");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("PNG Files", "*.png"),
-                        new FileChooser.ExtensionFilter("JPG Files", "*.jpg"),
-                        new FileChooser.ExtensionFilter("All Files", "*.*"));
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Image");
+            fileChooser.setInitialFileName(name + ".png");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("PNG Files", "*.png"),
+                    new FileChooser.ExtensionFilter("JPG Files", "*.jpg"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
 
-                File file = fileChooser.showSaveDialog(stage);
+            File file = fileChooser.showSaveDialog(new Stage());
 
-                if (file != null) {
-                    try {
-                        // Lưu ảnh vào file
-                        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-                        String fileName = file.getName().toLowerCase();
-                        if (fileName.endsWith(".png")) {
-                            ImageIO.write(bImage, "png", file);
-                        } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
-                            ImageIO.write(bImage, "jpg", file);
-                        } else {
-                            ImageIO.write(bImage, "png", file); // Mặc định lưu file dạng png
-                        }
-                        System.out.println("Image saved to: " + file.getAbsolutePath());
-
-                        // Tạo hiệu ứng flash
-                        createFlashEffect();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        showAlert("Error", "Failed to save image: " + e.getMessage());
+            if (file != null) {
+                try {
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(capturedImage, null);
+                    String fileName = file.getName().toLowerCase();
+                    if (fileName.endsWith(".png")) {
+                        ImageIO.write(bImage, "png", file);
+                    } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+                        ImageIO.write(bImage, "jpg", file);
+                    } else {
+                        ImageIO.write(bImage, "png", file); // Mặc định lưu file dạng png
                     }
-                } else {
-                    System.out.println("File save dialog was cancelled.");
+                    System.out.println("Image saved to: " + file.getAbsolutePath());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert("Error", "Failed to save image: " + e.getMessage());
                 }
             } else {
-                System.out.println("No image available to save.");
-                showAlert("No Image", "No image available to save.");
+                System.out.println("File save dialog was cancelled.");
             }
         });
+    }
+
+    private Image captureImage() {
+        // Thực hiện chụp ảnh từ originalFrame hoặc nguồn hình ảnh của bạn
+        // Đảm bảo originalFrame là kiểu phù hợp
+        if (originalFrame instanceof ImageView) {
+            return ((ImageView) originalFrame).getImage();
+        } else {
+            System.out.println("No image available to capture.");
+            return null;
+        }
+
     }
 
     private void createFlashEffect() {
@@ -387,5 +403,11 @@ public class MainController extends Utils {
         //controller.setImage(lastImage);
         controller.setStage(stage);
         stage.show();;
+    }
+    public void releaseResources() {
+        // Thực hiện giải phóng các tài nguyên OpenCV hoặc các tài nguyên khác tại đây
+        System.out.println("Releasing resources...");
+        // Ví dụ: nếu bạn có một CameraCapture object để giải phóng
+        // cameraCapture.release();
     }
 }
