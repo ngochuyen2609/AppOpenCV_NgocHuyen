@@ -46,42 +46,18 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
-
-public class MainController {
-
-    private Stage stage;
-    @FXML
-    private Button cameraButton;
-    @FXML
-    private ImageView originalFrame;
+public class MainController extends StartStopCamera {
     @FXML
     private StackPane stackPane;
-    @FXML
-    private Label lblnumber ;
-    //String source = "C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
     String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
     CascadeClassifier faceDetector = new CascadeClassifier(source);
-//    CascadeClassifier faceDetector = new CascadeClassifier(source);
 
-    private boolean isCameraActive = false;
-    private VideoCapture cameraCapture;
-    @FXML
-    private void startStopCamera(ActionEvent event) {
-        if (!isCameraActive) {
-            startCamera();
-            cameraButton.setText("Stop");
-        } else {
-            stopCamera();
-            cameraButton.setText("Start");
-            lblnumber.setText("Person Number");
-        }
-    }
-    private void startCamera() {
+    @Override
+    protected void startCamera() {
         cameraCapture = new VideoCapture(0);
         MatOfRect rostros = new MatOfRect();
         Mat frame = new Mat();
         Mat frame_gray = new Mat();
-        BufferedImage buff = null;
 
         isCameraActive = true;
 
@@ -100,29 +76,15 @@ public class MainController {
                         Rect[] facesArray = rostros.toArray();
                         System.out.println("Số người có trong Camera: " + facesArray.length);
 
-                        for (int i = 0; i < facesArray.length; i++) {
-                            Point center = new Point((facesArray[i].x + facesArray[i].width * 0.5),
-                                    (facesArray[i].y + facesArray[i].height * 0.5));
-                            Imgproc.ellipse(frame,
-                                    center,
-                                    new Size(facesArray[i].width * 0.5, facesArray[i].height * 0.5),
-                                    0,
-                                    0,
-                                    360,
-                                    new Scalar(255, 0, 255), 4, 8, 0);
-
-                            Mat faceROI = frame_gray.submat(facesArray[i]);
-                            Imgproc.rectangle(frame,
-                                    new Point(facesArray[i].x, facesArray[i].y),
-                                    new Point(facesArray[i].x + facesArray[i].width, facesArray[i].y + facesArray[i].height),
-                                    new Scalar(123, 213, 23, 220));
-                            Imgproc.putText(frame, "this is person ",
-                                    new Point(facesArray[i].x, facesArray[i].y - 20), 1, 1, new Scalar(255, 255, 255));
+                        for (Rect face : facesArray) {
+                            Point center = new Point((face.x + face.width * 0.5), (face.y + face.height * 0.5));
+                            Imgproc.ellipse(frame, center, new Size(face.width * 0.5, face.height * 0.5), 0, 0, 360, new Scalar(255, 0, 255), 4, 8, 0);
+                            Imgproc.rectangle(frame, new Point(face.x, face.y), new Point(face.x + face.width, face.y + face.height), new Scalar(123, 213, 23, 220));
+                            Imgproc.putText(frame, "this is person ", new Point(face.x, face.y - 20), 1, 1, new Scalar(255, 255, 255));
                         }
 
                         Platform.runLater(() -> {
-                            int no = facesArray.length;
-                            lblnumber.setText("Have" + String.valueOf(no));
+                            lblnumber.setText("Have " + facesArray.length);
 
                             MatOfByte mem = new MatOfByte();
                             Imgcodecs.imencode(".bmp", frame, mem);
@@ -130,6 +92,7 @@ public class MainController {
                             Image im = new Image(in);
                             originalFrame.setImage(im);
                         });
+
                         Thread.sleep(50);
 
                     } catch (Exception ex) {
@@ -140,27 +103,9 @@ public class MainController {
         }).start();
     }
 
-    private void stopCamera() {
-        isCameraActive = false;
-        cameraCapture.release(); // Giải phóng tài nguyên camera
-        lblnumber.setText("Chua bat cam");
-        // Set originalFrame thành hình ảnh trống
-        Platform.runLater(() -> {
-            originalFrame.setImage(null);
-        });
-    }
-
-    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
     @FXML
     public void clickCapture(ActionEvent event) {
-        // Chụp ảnh ngay khi nhấn nút
         Image capturedImage = captureImage();
-        // Tạo hiệu ứng flash (nếu cần thiết)
         createFlashEffect();
 
         if (capturedImage == null) {
@@ -271,117 +216,13 @@ public class MainController {
         alert.showAndWait();
     }
 
-
-    // Đảm bảo cập nhật kích thước của hiệu ứng flash khi kích thước cửa sổ thay đổi
-    @FXML
-    public void initialize() {
-        stackPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (stackPane.getChildren().size() > 1) {
-                javafx.scene.shape.Rectangle flash = (javafx.scene.shape.Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-                flash.setWidth(newVal.doubleValue());
-            }
-        });
-
-        stackPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (stackPane.getChildren().size() > 1) {
-                javafx.scene.shape.Rectangle flash = (javafx.scene.shape.Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-                flash.setHeight(newVal.doubleValue());
-            }
-        });
-    }
-
-
     @FXML
     public void clickChoose(ActionEvent event) {
-        chooseImage();
-    }
-    // Sự kiện chọn ảnh
-    private void chooseImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            String imagePath = selectedFile.getAbsolutePath();
-            String selectedFolderPath = "selected";
-            String outputImagePath = selectedFolderPath + "/output.jpg";
-
-            File selectedFolder = new File(selectedFolderPath);
-            if (!selectedFolder.exists()) {
-                selectedFolder.mkdir();
-            }
-
-            File copiedFile = new File(selectedFolderPath, "selected_image.jpg");
-            try {
-                Files.copy(Paths.get(imagePath), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            Mat src = Imgcodecs.imread(copiedFile.getAbsolutePath());
-
-            if (src.empty()) {
-                System.out.println("Không thể mở ảnh: " + copiedFile.getAbsolutePath());
-                return;
-            }
-
-            CascadeClassifier faceDetector = new CascadeClassifier("src/main/resources/com/example/demo4/lbpcascades/lbpcascade_frontalface_improved.xml");
-
-            if (faceDetector.empty()) {
-                System.out.println("Không thể tải bộ phân loại");
-                return;
-            }
-
-            MatOfRect faceDetections = new MatOfRect();
-            faceDetector.detectMultiScale(src, faceDetections);
-
-            for (Rect rect : faceDetections.toArray()) {
-                Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-                        new Scalar(0, 255, 0), 3);
-            }
-
-            Imgcodecs.imwrite(outputImagePath, src);
-
-            BufferedImage bufferedImage = matToBufferedImage(src);
-            WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
-
-
-
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
-                Parent root = loader.load();
-
-                ImageViewController controller = loader.getController();
-                controller.setStage(stage);
-                Scene newScene = new Scene(root);
-                controller.setLastImage(resultImage);
-                ZoomableImageView zoomableImageView = new ZoomableImageView();
-                zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
-                zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
-                zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
-                zoomableImageView.setPreserveRatio(true);
-
-                controller.getImage_layout().getChildren().add(zoomableImageView);
-                newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
-                stage.setScene(newScene);
-                stage.setTitle("Selected Image");
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+            ChooseImage chooseImage = new ChooseImage();
+            chooseImage.setStage(stage); // Thiết lập stage cho đối tượng ChooseImage
+            chooseImage.chooseImage();
     }
 
-    private BufferedImage matToBufferedImage(Mat mat) {
-        int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
-        BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
-        mat.get(0, 0, ((DataBufferByte) image.getRaster().getDataBuffer()).getData());
-        return image;
-    }
     @FXML
     public void clickFilter(ActionEvent event) throws IOException {
         try {

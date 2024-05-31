@@ -27,19 +27,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ImageViewController {
+public class ImageViewController extends ChooseImage {
 
     @FXML
     private ImageView image;
     @FXML
     private StackPane image_layout;
     private static Image lastImage;
-
-    private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     public StackPane getImage_layout() {
         return image_layout;
@@ -90,118 +84,6 @@ public class ImageViewController {
     public void clickChoose(ActionEvent event) {
         chooseImage();
     }
-
-    // Sự kiện chọn ảnh
-    private void chooseImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            String imagePath = selectedFile.getAbsolutePath();
-            String selectedFolderPath = "selected";
-            String outputImagePath = selectedFolderPath + "/output.jpg";
-
-            File selectedFolder = new File(selectedFolderPath);
-            if (!selectedFolder.exists()) {
-                selectedFolder.mkdir();
-            }
-
-            File copiedFile = new File(selectedFolderPath, "selected_image.jpg");
-            try {
-                Files.copy(Paths.get(imagePath), copiedFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            Mat src = Imgcodecs.imread(copiedFile.getAbsolutePath());
-
-            if (src.empty()) {
-                System.out.println("Không thể mở ảnh: " + copiedFile.getAbsolutePath());
-                return;
-            }
-
-            CascadeClassifier faceDetector = new CascadeClassifier("src/main/resources/com/example/demo4/lbpcascades/lbpcascade_frontalface_improved.xml");
-
-            if (faceDetector.empty()) {
-                System.out.println("Không thể tải bộ phân loại");
-                return;
-            }
-
-            MatOfRect faceDetections = new MatOfRect();
-            faceDetector.detectMultiScale(src, faceDetections);
-
-            for (Rect rect : faceDetections.toArray()) {
-                Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-                        new Scalar(0, 255, 0), 3);
-            }
-
-            Imgcodecs.imwrite(outputImagePath, src);
-
-            BufferedImage bufferedImage = matToBufferedImage(src);
-            WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
-
-            lastImage=resultImage;
-
-
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
-                Parent root = loader.load();
-
-                ImageViewController controller = loader.getController();
-                controller.setStage(stage);
-                Scene newScene = new Scene(root);
-
-                ZoomableImageView zoomableImageView = new ZoomableImageView();
-                zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
-                zoomableImageView.fitWidthProperty().bind(controller.getImage_layout().widthProperty());
-                zoomableImageView.fitHeightProperty().bind(controller.getImage_layout().heightProperty());
-                zoomableImageView.setPreserveRatio(true);
-
-                controller.getImage_layout().getChildren().add(zoomableImageView);
-                newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
-                stage.setScene(newScene);
-                stage.setTitle("Selected Image");
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private BufferedImage matToBufferedImage(Mat mat) {
-        int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
-        BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
-        mat.get(0, 0, ((java.awt.image.DataBufferByte) image.getRaster().getDataBuffer()).getData());
-        return image;
-    }
-
-
-//    private void showImageInCurrentStage(File file) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
-//        Parent root = loader.load();
-//
-//        //add controller
-//        ImageViewController controller = loader.getController();
-//        Image image_new = new Image(file.toURI().toString());
-//
-//
-//        controller.setImage(image_new);
-//
-//        Scene newScene = new Scene(root);
-//
-//        stage.setScene(newScene); // Thiết lập scene mới vào stage hiện tại
-//        stage.setTitle("Selected Image");
-//
-//        controller.setStage(stage);
-//
-//        //thêm css mới cho scene này
-//        newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
-//    }
 
     @FXML
     public void clickFilter (ActionEvent event) throws IOException {

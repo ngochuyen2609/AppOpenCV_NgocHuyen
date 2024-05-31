@@ -10,15 +10,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class FilterController {
-
-    private Stage stage;
-
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
+public class FilterController extends Filter {
+    @Override
     public void chooseFilter() {
         try {
             //Thêm fxml
@@ -39,22 +32,6 @@ public class FilterController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @FXML
-    public void clickFilter1(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter2(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter3(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter4(ActionEvent event) {
-        chooseFilter();
     }
 }
 

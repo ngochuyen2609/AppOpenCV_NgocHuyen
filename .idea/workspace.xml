@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update captureCamera">
+    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update filtercontroller">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selected/output.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/output.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selected/selected_image.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/selected_image.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filter-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filter-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717072028656</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="huyen update filtercontroller">
+      <option name="closed" value="true" />
+      <created>1717083723209</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1717083723209</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -175,6 +184,7 @@
     <MESSAGE value="huyen update capture image" />
     <MESSAGE value="huyen update startstopCamera" />
     <MESSAGE value="huyen update captureCamera" />
-    <option name="LAST_COMMIT_MESSAGE" value="huyen update captureCamera" />
+    <MESSAGE value="huyen update filtercontroller" />
+    <option name="LAST_COMMIT_MESSAGE" value="huyen update filtercontroller" />
   </component>
 </project>

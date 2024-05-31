@@ -11,29 +11,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class FilterImageController {
-
-    private Stage stage;
-    @FXML
-    private ImageView filter1;
-    @FXML
-    private ImageView filter2;
-    @FXML
-    private ImageView filter3;
-    @FXML
-    private ImageView filter4;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public void setImage (Image image) {
+public class FilterImageController extends Filter{
+    public void setImage(Image image) {
         filter1.setImage(image);
         filter2.setImage(image);
         filter3.setImage(image);
         filter4.setImage(image);
     }
-
+    @Override
     public void chooseFilter() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
@@ -43,7 +28,7 @@ public class FilterImageController {
             controller.setStage(stage);
             Scene newScene = new Scene(root);
 
-            Image resultImage =controller.getLatestImage();
+            Image resultImage = controller.getLatestImage();
 
             ZoomableImageView zoomableImageView = new ZoomableImageView();
             zoomableImageView.setImage(resultImage); // Đặt hình ảnh cho ZoomableImageView
@@ -53,7 +38,6 @@ public class FilterImageController {
 
             controller.getImage_layout().getChildren().add(zoomableImageView);
 
-
             newScene.getStylesheets().add(getClass().getResource("image.css").toExternalForm());
             stage.setScene(newScene);
             stage.setTitle("Selected Image");
@@ -62,21 +46,4 @@ public class FilterImageController {
             e.printStackTrace();
         }
     }
-    @FXML
-    public void clickFilter1(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter2(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter3(ActionEvent event) {
-        chooseFilter();
-    }
-    @FXML
-    public void clickFilter4(ActionEvent event) {
-        chooseFilter();
-    }
 }
-
