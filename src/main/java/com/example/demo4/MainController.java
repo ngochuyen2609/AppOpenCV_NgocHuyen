@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,22 +26,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
-
-import java.awt.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 public class MainController extends StartStopCamera {
@@ -59,7 +48,7 @@ public class MainController extends StartStopCamera {
         Mat frame = new Mat();
         Mat frame_gray = new Mat();
 
-        isCameraActive = true;
+        isCameraActive.set(true);
 
         new Thread(() -> {
             while (cameraCapture.read(frame)) {
@@ -220,7 +209,7 @@ public class MainController extends StartStopCamera {
     public void clickChoose(ActionEvent event) {
             ChooseImage chooseImage = new ChooseImage();
             chooseImage.setStage(stage); // Thiết lập stage cho đối tượng ChooseImage
-            chooseImage.chooseImage();
+            chooseImage.clickChoose();
     }
 
     @FXML

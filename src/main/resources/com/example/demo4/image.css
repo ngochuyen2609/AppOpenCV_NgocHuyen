@@ -57,6 +57,9 @@
 #layout_new {
     -fx-background-color: #1a1a1a;
 }
+#pane {
+    -fx-background-color: #1a1a1a;
+}
 #image_layout {
     -fx-background-color: #1a1a1a;
 }

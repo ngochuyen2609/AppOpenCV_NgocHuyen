@@ -44,13 +44,6 @@ public class ImageViewController extends ChooseImage {
         return image;
     }
 
-
-    public void setlImage(Image a) {
-        image.setImage(a);
-        image.getStyleClass().add("image");
-        lastImage = a; // Cập nhật ảnh gần nhất
-    }
-
     public void setLastImage(Image a){
         lastImage = a;
     }
@@ -81,11 +74,6 @@ public class ImageViewController extends ChooseImage {
         }
     }
     @FXML
-    public void clickChoose(ActionEvent event) {
-        chooseImage();
-    }
-
-    @FXML
     public void clickFilter (ActionEvent event) throws IOException {
 
         if( lastImage == null) {
@@ -107,8 +95,6 @@ public class ImageViewController extends ChooseImage {
             stage.setTitle("Select Filter");
             //thêm css mới cho scene này
             newScene.getStylesheets().add(getClass().getResource("filterImage.css").toExternalForm());
-
-            controller.setImage(lastImage);
             controller.setStage(stage);
             stage.show();;
         }
