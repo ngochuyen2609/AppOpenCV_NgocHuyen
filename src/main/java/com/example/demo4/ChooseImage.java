@@ -30,10 +30,6 @@ public class ChooseImage {
         this.stage = stage;
     }
 
-    public File getSelectedFile() {
-        return selectedFile;
-    }
-
     BufferedImage matToBufferedImage(Mat mat) {
         int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
         BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
@@ -41,7 +37,7 @@ public class ChooseImage {
         return image;
     }
 
-    private void displayImage(WritableImage image) {
+    public void displayImage(WritableImage image) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("image-view.fxml"));
             Parent root = loader.load();
@@ -67,9 +63,9 @@ public class ChooseImage {
         }
     }
 
-    String outputImagePath;
-    File copiedFile;
-    File selectedFile;
+    public File copiedFile;
+    public File selectedFile;
+    public String imagePath;
     @FXML
     public void clickChoose() {
         FileChooser fileChooser = new FileChooser();
@@ -77,10 +73,11 @@ public class ChooseImage {
 
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        selectedFile = fileChooser.showOpenDialog(stage);
+        this.selectedFile = fileChooser.showOpenDialog(stage);
 
-        if (selectedFile != null) {
-            String imagePath = selectedFile.getAbsolutePath();
+        if (selectedFile != null ) {
+            // Lưu đường dẫn của tệp ảnh đã chọn vào biến cục bộ
+            this.imagePath = selectedFile.getAbsolutePath();
             String selectedFolderPath = "selected";
 
             File selectedFolder = new File(selectedFolderPath);
@@ -88,7 +85,7 @@ public class ChooseImage {
                 selectedFolder.mkdir();
             }
 
-            copiedFile = new File(selectedFolderPath, "selected_image.jpg");
+            this.copiedFile = new File(selectedFolderPath, "selected_image.jpg");
 
             try {
                 Files.copy(Paths.get(imagePath), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -113,28 +110,14 @@ public class ChooseImage {
 
     @FXML
     public void detectImage() {
-        if (selectedFile != null) {
-            String imagePath = selectedFile.getAbsolutePath();
+
             String selectedFolderPath = "selected";
             String outputImagePath = selectedFolderPath + "/output.jpg";
 
-            File selectedFolder = new File(selectedFolderPath);
-            if (!selectedFolder.exists()) {
-                selectedFolder.mkdir();
-            }
-
-            copiedFile = new File(selectedFolderPath, "selected_image.jpg");
-            try {
-                Files.copy(Paths.get(imagePath), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            Mat src = Imgcodecs.imread(copiedFile.getAbsolutePath());
+            Mat src = Imgcodecs.imread("selected/selected_image.jpg");
 
             if (src.empty()) {
-                System.out.println("Không thể mở ảnh: " + copiedFile.getAbsolutePath());
+                System.out.println("Không thể mở ảnh: " + "selected_image.jpg");
                 return;
             }
 
@@ -158,8 +141,9 @@ public class ChooseImage {
             BufferedImage bufferedImage = matToBufferedImage(src);
             WritableImage resultImage = SwingFXUtils.toFXImage(bufferedImage, null);
             displayImage(resultImage);
-        }
+        //} else System.out.println("Vui long chon anh");
     }
+
 
     public Mat getOriginalImage() {
         return originalImage;

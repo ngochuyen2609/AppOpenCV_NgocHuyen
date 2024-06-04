@@ -4,15 +4,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane id="root" prefHeight="651.0" prefWidth="638.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.MainController">
    <children>
       <Label id="person_num" fx:id="lblnumber" layoutX="399.0" layoutY="14.0" prefHeight="17.0" prefWidth="104.0" text="Person number" />
-      <Button id="takeAPhoto" fx:id="takeAPhoto" layoutX="473.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" />
-      <Button id="choose" layoutX="112.0" layoutY="580.0" mnemonicParsing="false" onAction="#clickChoose" text="Choose a photo" />
-      <Button id="start" fx:id="cameraButton" layoutX="327.0" layoutY="580.0" mnemonicParsing="false" onAction="#startStopCamera" text="Start" />
       <StackPane fx:id="stackPane" layoutX="6.0" layoutY="45.0" prefHeight="474.0" prefWidth="626.0">
          <children>
             <ImageView fx:id="originalFrame" fitHeight="462.0" fitWidth="606.0" pickOnBounds="true" preserveRatio="true" />
@@ -20,6 +20,21 @@
             <Rectangle fx:id="flashEffect" fill="#ffffff" opacity="0" />
          </children>
       </StackPane>
-      <Button fx:id="filter" layoutX="604.0" layoutY="529.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
+      <Button fx:id="filter" layoutX="604.0" layoutY="519.0" mnemonicParsing="false" onAction="#clickFilter" text=":" />
+      <GridPane layoutX="-1.0" layoutY="543.0" prefHeight="109.0" prefWidth="638.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button id="choose" mnemonicParsing="false" onAction="#clickChoose" text="Choose a photo" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button id="takeAPhoto" fx:id="takeAPhoto" mnemonicParsing="false" onAction="#clickCapture" text="Take a photo" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button id="start" fx:id="cameraButton" mnemonicParsing="false" onAction="#startStopCamera" prefHeight="39.0" prefWidth="87.0" text="Start" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>

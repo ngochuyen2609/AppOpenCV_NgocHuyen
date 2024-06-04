@@ -4,28 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update main filter startstopcamera chooseImage oop">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/tai_meo1.png" afterDir="false" />
+    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="huyen update main filter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/Readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/camera-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/camera-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/hình nền tổng (chưa kèm icon).png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/hình nền tổng (chưa kèm icon).png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/hình nền tổng.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/hình nền tổng.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/more_options-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/more_options-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/photo-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/photo-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Demo app interface/video_recording-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/interface/video_recording-icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selected/output.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/output.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/selected/selected_image.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/selected_image.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ChooseImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ChooseImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/Filter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Filter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/StartStopCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/StartStopCamera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filter-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filter-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/hello-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/takeAPhoto.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/takeAPhoto.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717143338787</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="huyen update main filter">
+      <option name="closed" value="true" />
+      <created>1717261231797</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1717261231797</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -213,6 +207,7 @@
     <MESSAGE value="huyen update captureCamera" />
     <MESSAGE value="huyen update filtercontroller" />
     <MESSAGE value="huyen update main filter startstopcamera chooseImage oop" />
-    <option name="LAST_COMMIT_MESSAGE" value="huyen update main filter startstopcamera chooseImage oop" />
+    <MESSAGE value="huyen update main filter" />
+    <option name="LAST_COMMIT_MESSAGE" value="huyen update main filter" />
   </component>
 </project>
