@@ -94,7 +94,7 @@ public class ImageViewController extends ChooseImage {
             stage.setScene(newScene);
             stage.setTitle("Select Filter");
             //thêm css mới cho scene này
-            newScene.getStylesheets().add(getClass().getResource("filterImage.css").toExternalForm());
+            newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
             controller.setStage(stage);
             stage.show();;
         }

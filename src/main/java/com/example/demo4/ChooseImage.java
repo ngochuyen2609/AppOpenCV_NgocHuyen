@@ -110,7 +110,6 @@ public class ChooseImage {
 
     @FXML
     public void detectImage() {
-
             String selectedFolderPath = "selected";
             String outputImagePath = selectedFolderPath + "/output.jpg";
 

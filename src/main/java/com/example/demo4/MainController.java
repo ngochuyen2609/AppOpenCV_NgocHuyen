@@ -41,57 +41,6 @@ public class MainController extends StartStopCamera {
     String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
     CascadeClassifier faceDetector = new CascadeClassifier(source);
 
-    @Override
-    protected void startCamera() {
-        cameraCapture = new VideoCapture(0);
-        MatOfRect rostros = new MatOfRect();
-        Mat frame = new Mat();
-        Mat frame_gray = new Mat();
-
-        isCameraActive.set(true);
-
-        new Thread(() -> {
-            while (cameraCapture.read(frame)) {
-                if (frame.empty()) {
-                    System.out.println("No detection");
-                    break;
-                } else {
-                    try {
-                        Imgproc.cvtColor(frame, frame_gray, Imgproc.COLOR_BGR2GRAY);
-                        Imgproc.equalizeHist(frame_gray, frame_gray);
-                        double w = frame.width();
-                        double h = frame.height();
-                        faceDetector.detectMultiScale(frame_gray, rostros, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, new Size(30, 30), new Size(w, h));
-                        Rect[] facesArray = rostros.toArray();
-                        System.out.println("Số người có trong Camera: " + facesArray.length);
-
-                        for (Rect face : facesArray) {
-                            Point center = new Point((face.x + face.width * 0.5), (face.y + face.height * 0.5));
-                            Imgproc.ellipse(frame, center, new Size(face.width * 0.5, face.height * 0.5), 0, 0, 360, new Scalar(255, 0, 255), 4, 8, 0);
-                            Imgproc.rectangle(frame, new Point(face.x, face.y), new Point(face.x + face.width, face.y + face.height), new Scalar(123, 213, 23, 220));
-                            Imgproc.putText(frame, "this is person ", new Point(face.x, face.y - 20), 1, 1, new Scalar(255, 255, 255));
-                        }
-
-                        Platform.runLater(() -> {
-                            lblnumber.setText("Have " + facesArray.length);
-
-                            MatOfByte mem = new MatOfByte();
-                            Imgcodecs.imencode(".bmp", frame, mem);
-                            InputStream in = new ByteArrayInputStream(mem.toArray());
-                            Image im = new Image(in);
-                            originalFrame.setImage(im);
-                        });
-
-                        Thread.sleep(50);
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
-
     @FXML
     public void clickCapture(ActionEvent event) {
         Image capturedImage = captureImage();
@@ -130,7 +79,6 @@ public class MainController extends StartStopCamera {
         });
 
         Optional<String> result = dialog.showAndWait();
-
         result.ifPresent(name -> {
             if (name.trim().isEmpty()) {
                 showAlert("Invalid Name", "Image name cannot be empty.");

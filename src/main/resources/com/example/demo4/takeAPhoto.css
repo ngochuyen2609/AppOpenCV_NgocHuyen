@@ -1,174 +1,81 @@
 #start {
-    -fx-background-color:
-            #f3b3bf,
-            rgba(0,0,0,0.05),
-            linear-gradient(#f3b3bf, #f3b3bf),
-            linear-gradient(#f3b3bf 0%, #f3b3bf 20%, #f3b3bf 80%, #f3b3bf 100%),
-            linear-gradient(#e35c82, #e35c82);
+    -fx-background-color: transparent;
     -fx-background-insets: 0,9 9 8 9,9,10,11;
     -fx-background-radius: 50;
     -fx-padding: 15 25 15 25;
-    -fx-font-family: "Arial";
-    -fx-font-size: 16px;
-    -fx-text-fill: #311c09;
-    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.1) , 2, 0.0 , 0 , 1);
-}
-#start Text {
-    -fx-effect: dropshadow( one-pass-box , rgba(255,255,255,0.5) , 0, 0.0 , 0 , 1);
 }
 
 #start:hover {
-    -fx-background-color:
-            #f3b3bf,
-             rgba(0,0,0,0.05),
-            linear-gradient(#f3b3bf, #f3b3bf),
-            linear-gradient(#f3b3bf 0%, #f3b3bf 20%, #f3b3bf 80%, #f3b3bf 100%),
-            linear-gradient(#e35c82, #e35c82);
+    -fx-background-color: transparent;
     -fx-background-insets: 0,9 9 8 9,9,0,11;
     -fx-background-radius: 50;
-    -fx-padding: 15 25 15 25;
-    -fx-font-family: "Arial";
-    -fx-font-size: 16px;
-    -fx-text-fill: #311c09;
-    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.1) , 2, 0.0 , 0 , 1);
 }
-
 
 #root {
-    -fx-background-color: #fae1e6;
-}
-#takeAPhoto {
-    -fx-background-color:
-            #f3b3bf,
-            rgba(0,0,0,0.05),
-            linear-gradient(#f3b3bf, #f3b3bf),
-            linear-gradient(#f3b3bf 0%, #f3b3bf 20%, #f3b3bf 80%, #f3b3bf 100%),
-            linear-gradient(#e35c82, #e35c82);
-    -fx-background-insets: 0,9 9 8 9,9,10,11;
-    -fx-background-radius: 50;
-    -fx-padding: 15 25 15 25;
-    -fx-font-family: "Arial";
-    -fx-font-size: 16px;
-    -fx-text-fill: #311c09;
-    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.1) , 2, 0.0 , 0 , 1);
-}
-#takeAPhoto Text {
-    -fx-effect: dropshadow( one-pass-box , rgba(255,255,255,0.5) , 0, 0.0 , 0 , 1);
-}
-
-#takeAPhoto:hover {
-    -fx-background-color:
-            #ecebe9,
-            rgba(0,0,0,0.05),b
-            linear-gradient(#f3b3bf, #f3b3bf),
-            linear-gradient(#f3b3bf 0%, #f3b3bf 20%, #f3b3bf 80%, #f3b3bf 100%),
-            linear-gradient(#f3b3bf, #f3b3bf);
-    -fx-background-insets: 0,9 9 8 9,9,0,11;
-    -fx-background-radius: 50;
-    -fx-padding: 15 25 15 25;
-    -fx-font-family: "Arial";
-    -fx-font-size: 16px;
-    -fx-text-fill: #311c09;
-    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.1) , 2, 0.0 , 0 , 1);
+    -fx-background-image: url('interface/RootMainController.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 #choose {
-    -fx-padding: 10px 20px;
-    -fx-border-width: 2px;
-    -fx-border-color: #2c2c2c;
-    -fx-background-color: #1a1a1a;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-border-radius: 20px;
-    -fx-transition-property: all;
-    -fx-transition-duration: 0.4s;
-    -fx-transition-timing-function: ease;
-    -fx-outline: none;
-    -fx-position: relative;
-    -fx-overflow: hidden;
-    -fx-font-weight: bold;
-}
-
-#choose:hover::after {
-    -fx-scale-x: 4; /* Thay thế scale(4) bằng -fx-scale-x và -fx-scale-y */
-    -fx-scale-y: 4;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
 }
 
 #choose:hover {
-    -fx-border-color: #666666;
-    -fx-background-color: #292929;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
+#takeAPhoto {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
 }
 
-#choose:after {
-    -fx-content: "";
-    -fx-position: absolute;
-    -fx-top: 0;
-    -fx-left: 0;
-    -fx-width: 100%;
-    -fx-height: 100%;
-    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
-    -fx-scale-x: 0; /* Thay thế scale(0) bằng -fx-scale-x và -fx-scale-y */
-    -fx-scale-y: 0;
-    -fx-transition-property: transform;
-    -fx-transition-duration: 0.5s;
-    -fx-transition-timing-function: ease;
+#takeAPhoto:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
 }
 
 /* Áp dụng màu sắc và phông chữ cho nhãn */
 #person_num {
-    -fx-text-fill: #000000; /* Màu chữ */
-    -fx-font-size: 14px; /* Kích thước phông chữ */
-    -fx-font-family: "Arial"; /* Phông chữ */
     -fx-font-weight: bold; /* Độ đậm của phông chữ */
 }
 
 /* Hiệu ứng khi di chuột vào nhãn */
 #person_num:hover {
-    -fx-text-fill: #474848; /* Màu chữ khi di chuột vào */
+    -fx-font-weight: bold;
     -fx-cursor: hand; /* Thay đổi hình dạng con trỏ */
 }
 
-
 #filter {
-    -fx-padding: 5px 10px;
-    -fx-border-width: 2px;
-    -fx-border-color: #2c2c2c;
-    -fx-background-color: #1a1a1a;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-border-radius: 20px;
-    -fx-transition-property: all;
-    -fx-transition-duration: 0.4s;
-    -fx-transition-timing-function: ease;
-    -fx-outline: none;
-    -fx-position: relative;
-    -fx-overflow: hidden;
-    -fx-font-weight: bold;
-}
-
-#filter:hover::after {
-    -fx-scale-x: 4; /* Thay thế scale(4) bằng -fx-scale-x và -fx-scale-y */
-    -fx-scale-y: 4;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
 }
 
 #filter:hover {
-    -fx-border-color: #666666;
-    -fx-background-color: #292929;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
 }
 
-#filter:after {
-    -fx-content: "";
-    -fx-position: absolute;
-    -fx-top: 0;
-    -fx-left: 0;
-    -fx-width: 100%;
-    -fx-height: 100%;
-    -fx-background-color: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
-    -fx-scale-x: 0; /* Thay thế scale(0) bằng -fx-scale-x và -fx-scale-y */
-    -fx-scale-y: 0;
-    -fx-transition-property: transform;
-    -fx-transition-duration: 0.5s;
-    -fx-transition-timing-function: ease;
+#back {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#back:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
 }

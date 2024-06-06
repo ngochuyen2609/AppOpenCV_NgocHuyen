@@ -28,7 +28,6 @@ public class StartStopCamera extends FilterController {
     @FXML
     protected Label lblnumber;
 
-    protected CascadeClassifier faceDetector;
     protected AtomicBoolean isCameraActive = new AtomicBoolean(false);
     protected VideoCapture cameraCapture;
     protected Mat sticker;
@@ -50,7 +49,7 @@ public class StartStopCamera extends FilterController {
     protected void startStopCamera(ActionEvent event) {
         if (isCameraActive.get()) {
             stopCamera();
-            cameraButton.setText("Start");
+            //cameraButton.setText("Start");
             lblnumber.setText("Person Number");
         } else {
             if (isFilterValue.get()) {
@@ -58,26 +57,54 @@ public class StartStopCamera extends FilterController {
             } else {
                 startCamera();
             }
-            cameraButton.setText("Stop");
+            //cameraButton.setText("Stop");
         }
     }
 
+    String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
+    CascadeClassifier faceDetector = new CascadeClassifier(source);
+
+    @FXML
     protected void startCamera() {
         cameraCapture = new VideoCapture(0);
-        Mat frame = new Mat();
+        MatOfRect rostros = new MatOfRect();
+        final Mat[] frame = {new Mat()};
+        Mat frame_gray = new Mat();
 
         isCameraActive.set(true);
 
         new Thread(() -> {
-            while (isCameraActive.get() && cameraCapture.read(frame)) {
-                if (frame.empty()) {
+            while (cameraCapture.read(frame[0])) {
+                if (frame[0].empty()) {
                     System.out.println("No detection");
                     break;
                 } else {
                     try {
+                        Core.flip(frame[0], frame[0], 1);
+
+                        Imgproc.cvtColor(frame[0], frame_gray, Imgproc.COLOR_BGR2GRAY);
+                        Imgproc.equalizeHist(frame_gray, frame_gray);
+                        double w = frame[0].width();
+                        double h = frame[0].height();
+                        faceDetector.detectMultiScale(frame_gray, rostros, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, new Size(30, 30), new Size(w, h));
+                        Rect[] facesArray = rostros.toArray();
+                        System.out.println("Số người có trong Camera: " + facesArray.length);
+
+                        for (Rect face : facesArray) {
+                            Point center = new Point((face.x + face.width * 0.5), (face.y + face.height * 0.5));
+                            Imgproc.ellipse(frame[0], center, new Size(face.width * 0.5, face.height * 0.5), 0, 0, 360, new Scalar(255, 0, 255), 4, 8, 0);
+                            Imgproc.rectangle(frame[0], new Point(face.x, face.y), new Point(face.x + face.width, face.y + face.height), new Scalar(123, 213, 23, 220));
+                            Imgproc.putText(frame[0], "this is person ", new Point(face.x, face.y - 20), 1, 1, new Scalar(255, 255, 255));
+                        }
+
+                        // Chuyển đổi khung hình thành hình vuông với góc bo tròn
+                        frame[0] = convertToSquareWithRoundedCorners(frame[0]);
+
                         Platform.runLater(() -> {
+                            lblnumber.setText("Have " + facesArray.length);
+
                             MatOfByte mem = new MatOfByte();
-                            Imgcodecs.imencode(".bmp", frame, mem);
+                            Imgcodecs.imencode(".bmp", frame[0], mem);
                             InputStream in = new ByteArrayInputStream(mem.toArray());
                             Image im = new Image(in);
                             originalFrame.setImage(im);
@@ -95,7 +122,7 @@ public class StartStopCamera extends FilterController {
 
     protected CascadeClassifier faceCascade = loadCascade("src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_default.xml");
 
-    protected void startCameraWithFilter() {
+    public void startCameraWithFilter() {
         cameraCapture = new VideoCapture(0);
         final Mat[] frame = {new Mat()};
         Mat grayFrame = new Mat();
@@ -132,6 +159,10 @@ public class StartStopCamera extends FilterController {
                         }
                     }
 
+
+                    // Chuyển đổi khung hình thành hình vuông với góc bo tròn
+                    frame[0] = convertToSquareWithRoundedCorners(frame[0]);
+
                     // Update ImageView with the processed frame
                     Platform.runLater(() -> {
                         if (!frame[0].empty()) {
@@ -154,6 +185,34 @@ public class StartStopCamera extends FilterController {
         }).start();
     }
 
+    protected Mat convertToSquareWithRoundedCorners(Mat frame) {
+        // Chuyển đổi khung hình thành hình vuông
+        int size = Math.min(frame.width(), frame.height());
+        int x = (frame.width() - size) / 2;
+        int y = (frame.height() - size) / 2;
+        Rect roi = new Rect(x, y, size, size);
+        Mat squareFrame = new Mat(frame, roi);
+
+        // Tạo mặt nạ với các góc bo tròn
+        Mat mask = Mat.zeros(size, size, CvType.CV_8UC1);
+        int radius = size / 6; // Điều chỉnh bán kính nếu cần
+        Imgproc.rectangle(mask, new Point(radius, 0), new Point(size - radius, size), new Scalar(255), -1);
+        Imgproc.rectangle(mask, new Point(0, radius), new Point(size, size - radius), new Scalar(255), -1);
+        Imgproc.circle(mask, new Point(radius, radius), radius, new Scalar(255), -1);
+        Imgproc.circle(mask, new Point(size - radius, radius), radius, new Scalar(255), -1);
+        Imgproc.circle(mask, new Point(radius, size - radius), radius, new Scalar(255), -1);
+        Imgproc.circle(mask, new Point(size - radius, size - radius), radius, new Scalar(255), -1);
+
+        // Áp dụng mặt nạ vào khung hình và tạo khung hình vuông với các góc bo tròn
+        Mat maskedFrame = new Mat();
+        squareFrame.copyTo(maskedFrame, mask);
+
+        // Tạo khung nền để chỉ hiển thị phần khung hình vuông với các góc bo tròn
+        Mat result = Mat.zeros(size, size, squareFrame.type());
+        maskedFrame.copyTo(result, mask);
+
+        return result;
+    }
 
     protected void stopCamera() {
         isCameraActive.set(false);

@@ -39,7 +39,7 @@ public abstract class Filter {
         this.stage = stage;
     }
 
-    BufferedImage matToBufferedImage(Mat mat) {
+    public static BufferedImage matToBufferedImage(Mat mat) {
         int type = (mat.channels() == 1) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
         BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
         mat.get(0, 0, ((DataBufferByte) image.getRaster().getDataBuffer()).getData());
@@ -120,4 +120,8 @@ public abstract class Filter {
         // You can set another sticker here if needed
         chooseFilter();
     }
+    @FXML
+    public abstract void done (ActionEvent event);
+    @FXML
+    public abstract void back (ActionEvent event);
 }
