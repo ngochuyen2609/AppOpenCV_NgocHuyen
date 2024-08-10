@@ -4,24 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="update CSS">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageZoomPane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/ImageStage.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/demo4/MainStage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="28421e6a-11be-4cf3-ba4a-07d3b3251545" name="Changes" comment="optimize code">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/CameraStageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/FaceDetector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/Filter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageStageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/selected/selected_image.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/selected/selected_image.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/Application.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ChooseImage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/FilterImageController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ImageViewController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/StartStopCamera.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo4/ZoomableImageView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filter-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/filterImage-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/demo4/image-view.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +228,23 @@
       <option name="project" value="LOCAL" />
       <updated>1723282247273</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="optimize code">
+      <option name="closed" value="true" />
+      <created>1723282413431</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1723282413431</updated>
+    </task>
+    <task id="LOCAL-00015" summary="optimize code">
+      <option name="closed" value="true" />
+      <created>1723282513309</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1723282513309</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -260,7 +264,8 @@
     <MESSAGE value="huyen update interfaces moi" />
     <MESSAGE value="update filter" />
     <MESSAGE value="update CSS" />
-    <option name="LAST_COMMIT_MESSAGE" value="update CSS" />
+    <MESSAGE value="optimize code" />
+    <option name="LAST_COMMIT_MESSAGE" value="optimize code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
