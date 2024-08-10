@@ -1,46 +1,107 @@
 package com.example.demo4;
-
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import javafx.util.Duration;
-import org.opencv.core.*;
-import org.opencv.core.Point;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.core.Mat;
+
+import org.opencv.core.Rect;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
-public class MainController extends StartStopCamera {
+
+public class FilterStageController extends FilterController {
     @FXML
-    private StackPane stackPane;
-    String source = "src/main/resources/com/example/demo4/haarcascades/haarcascade_frontalface_alt.xml";
-    CascadeClassifier faceDetector = new CascadeClassifier(source);
+    private ImageView CameraFrame;
+    @FXML
+    private AnchorPane anchorPane;
+    protected VideoCapture cameraCapture;
+    protected AtomicBoolean isCameraActive = new AtomicBoolean(false);
 
+    @FXML
+    protected void startStopCamera() {
+        super.setUp();
+        if (isCameraActive.get()) stopCamera();
+        else startCamera();
+    }
+
+    protected void startCamera() {
+        cameraCapture = new VideoCapture(0);
+
+        final Mat[] frame = {new Mat()};
+
+        CameraFrame.setFitWidth(600);
+        CameraFrame.setFitHeight(450);
+        isCameraActive.set(true);
+
+        new Thread(() -> {
+            while (isCameraActive.get() && cameraCapture.read(frame[0])) {
+                if (frame[0].empty()) {
+                    System.out.println("No detection");
+                    break;
+                } else {
+                    try {
+                        Core.flip(frame[0], frame[0], 1);
+                        int val = super.getFilterType();
+                        if(val > 0){
+                            FaceDetector faceDetector = new FaceDetector();
+                            List<Rect> facesArray = faceDetector.detectFaces(frame[0]);
+                            Filter filter = new Filter();
+//                            System.out.println(val);
+                            for (Rect face : facesArray)
+                                frame[0] = filter.overlayImage(frame[0].clone(),val, face);
+                        }
+                        Platform.runLater(() -> {
+//                            lblnumber.setText("Have " + facesArray.size());
+                            MatOfByte mem = new MatOfByte();
+                            Imgcodecs.imencode(".bmp", frame[0], mem);
+                            InputStream in = new ByteArrayInputStream(mem.toArray());
+                            Image im = new Image(in);
+                            CameraFrame.setImage(im);
+                        });
+
+                        Thread.sleep(50);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+//            stopCamera();
+        }).start();
+    }
+
+    protected void stopCamera() {
+        isCameraActive.set(false);
+        if (cameraCapture != null) {
+            cameraCapture.release(); // Giải phóng tài nguyên camera
+        }
+        Platform.runLater(() -> CameraFrame.setImage(null));
+    }
     @FXML
     public void clickCapture(ActionEvent event) {
         Image capturedImage = captureImage();
@@ -79,9 +140,10 @@ public class MainController extends StartStopCamera {
         });
 
         Optional<String> result = dialog.showAndWait();
+
         result.ifPresent(name -> {
             if (name.trim().isEmpty()) {
-                showAlert("Invalid Name", "Image name cannot be empty.");
+                super.showAlert("Invalid Name", "Image name cannot be empty.");
                 return;
             }
 
@@ -119,11 +181,24 @@ public class MainController extends StartStopCamera {
         });
     }
 
+    private void createFlashEffect() {
+        // Tạo một Rectangle màu trắng trên StackPane để tạo hiệu ứng flash
+        javafx.scene.shape.Rectangle flash = new javafx.scene.shape.Rectangle(anchorPane.getWidth(), anchorPane.getHeight(), javafx.scene.paint.Color.WHITE);
+        anchorPane.getChildren().add(flash);
+
+        // Tạo hiệu ứng mờ dần cho flash
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), flash);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setOnFinished(e -> anchorPane.getChildren().remove(flash));
+        fadeTransition.play();
+    }
+
     private Image captureImage() {
         // Thực hiện chụp ảnh từ originalFrame hoặc nguồn hình ảnh của bạn
         // Đảm bảo originalFrame là kiểu phù hợp
-        if (originalFrame instanceof ImageView) {
-            return ((ImageView) originalFrame).getImage();
+        if (CameraFrame instanceof ImageView) {
+            return ((ImageView) CameraFrame).getImage();
         } else {
             System.out.println("No image available to capture.");
             return null;
@@ -131,60 +206,13 @@ public class MainController extends StartStopCamera {
 
     }
 
-    private void createFlashEffect() {
-        // Tạo một Rectangle màu trắng trên StackPane để tạo hiệu ứng flash
-        javafx.scene.shape.Rectangle flash = new javafx.scene.shape.Rectangle(stackPane.getWidth(), stackPane.getHeight(), javafx.scene.paint.Color.WHITE);
-        stackPane.getChildren().add(flash);
-
-        // Tạo hiệu ứng mờ dần cho flash
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), flash);
-        fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0.0);
-        fadeTransition.setOnFinished(e -> stackPane.getChildren().remove(flash));
-        fadeTransition.play();
-    }
-
-    // Hiển thị thông báo lỗi khi chưa có ảnh chụp
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     @FXML
-    public void clickChoose(ActionEvent event) {
-            ChooseImage chooseImage = new ChooseImage();
-            chooseImage.setStage(stage); // Thiết lập stage cho đối tượng ChooseImage
-            chooseImage.clickChoose();
+    protected void back(ActionEvent event) {
+        super.back(event);
     }
 
-    @FXML
-    public void clickFilter(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("filter-view.fxml"));
-            Parent root = loader.load();
-
-            // Kiểm tra để đảm bảo rằng controller đúng
-            FilterController controller = loader.getController();
-
-            Scene newScene = new Scene(root);
-            stage.setScene(newScene);
-            stage.setTitle("Select Filter");
-            newScene.getStylesheets().add(getClass().getResource("filter.css").toExternalForm());
-
-            controller.setStage(stage);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    public void releaseResources() {
-        // Thực hiện giải phóng các tài nguyên OpenCV hoặc các tài nguyên khác tại đây
-        System.out.println("Releasing resources...");
-        // Ví dụ: nếu bạn có một CameraCapture object để giải phóng
-        // cameraCapture.release();
-    }
 }
