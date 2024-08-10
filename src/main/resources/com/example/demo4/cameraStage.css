@@ -1,0 +1,81 @@
+#start {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#start:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
+
+#root {
+    -fx-background-image: url('interface/RootMainController.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+#choose {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#choose:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
+#takeAPhoto {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#takeAPhoto:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
+
+/* Áp dụng màu sắc và phông chữ cho nhãn */
+#person_num {
+    -fx-font-weight: bold; /* Độ đậm của phông chữ */
+}
+
+/* Hiệu ứng khi di chuột vào nhãn */
+#person_num:hover {
+    -fx-font-weight: bold;
+    -fx-cursor: hand; /* Thay đổi hình dạng con trỏ */
+}
+
+#filter {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#filter:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
+
+#back {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-radius: 50;
+    -fx-padding: 15 25 15 25;
+}
+
+#back:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,9 9 8 9,9,0,11;
+    -fx-background-radius: 50;
+}
